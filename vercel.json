@@ -1,0 +1,14 @@
+{
+  "trailingSlash": false,
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/api/vercel.js"
+    }
+  ],
+  "functions": {
+    "api/vercel.js": {
+      "includeFiles": "{node_modules,dist,public}/**/*"
+    }
+  }
+}
