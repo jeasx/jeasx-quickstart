@@ -7,9 +7,6 @@
     "dev": "NODE_ENV=development pm2-runtime start node_modules/jeasx/ecosystem.config.cjs"
   },
   "dependencies": {
-    "jeasx": "https://github.com/jeasx/jeasx.git"
-  },
-  "engines": {
-    "node": "20.x"
+    "jeasx": "0.0.1"
   }
 }
