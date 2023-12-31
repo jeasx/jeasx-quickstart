@@ -7,6 +7,6 @@
     "dev": "NODE_ENV=development pm2-runtime start node_modules/jeasx/ecosystem.config.cjs"
   },
   "dependencies": {
-    "jeasx": "0.0.1"
+    "jeasx": "0.0.2"
   }
 }
