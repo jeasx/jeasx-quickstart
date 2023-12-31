@@ -2,11 +2,11 @@
   "name": "jeasx-starter",
   "type": "module",
   "scripts": {
-    "start": "node node_modules/jeasx/server.js",
-    "build": "node node_modules/jeasx/esbuild.config.js",
-    "dev": "NODE_ENV=development pm2-runtime start node_modules/jeasx/ecosystem.config.cjs"
+    "start": "jeasx start",
+    "build": "jeasx build",
+    "dev": "jeasx dev"
   },
   "dependencies": {
-    "jeasx": "0.0.2"
+    "jeasx": "0.0.3"
   }
 }
