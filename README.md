@@ -1,8 +1,7 @@
-# Jeasx-Starter
-
-## Getting started
+# Jeasx-Quickstart
 
 ```bash
-npm install
+npx giget --install gh:jeasx/quickstart
+cd jeasx-quickstart
 npm run dev
 ```
