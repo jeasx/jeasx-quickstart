@@ -1,5 +1,4 @@
 /* This file is an example. Delete it at will. */
-
 import { requestContext } from "@fastify/request-context";
 
 /**

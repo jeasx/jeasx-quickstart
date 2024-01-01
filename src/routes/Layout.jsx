@@ -24,7 +24,14 @@ export default function Layout({
           />
           <title>{title}</title>
         </head>
-        <body>{children}</body>
+        <body>
+          <header>
+            <h1>{title}</h1>
+          </header>
+          <main>
+            <section>{children}</section>
+          </main>
+        </body>
       </html>
     </>
   );

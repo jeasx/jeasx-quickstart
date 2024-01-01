@@ -10,16 +10,9 @@ export default function DynamicPage({}) {
   const path = requestContext.get("request").urlData().path;
 
   return (
-    <Layout title="Jeasx" description="Welcome to Jeasx - JSX with Ease">
-      <header>
-        <h1>Jeasx - JSX with Ease</h1>
-      </header>
-      <main>
-        <section>
-          <h2>{path}</h2>
-          <a href="/">Go to homepage</a>
-        </section>
-      </main>
+    <Layout title="JSX with Ease = Jeasx" description={`Welcome to ${path}`}>
+      <h2>{path}</h2>
+      <a href="/">Go to homepage</a>
     </Layout>
   );
 }
