@@ -1,6 +1,6 @@
 /* This file is an example. Delete it at will. */
 
-import Layout from "./Layout";
+import Layout from "../components/Layout";
 
 /**
  * @param {import("./types").RouteProps} props

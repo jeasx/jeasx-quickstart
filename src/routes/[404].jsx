@@ -1,6 +1,7 @@
 /* This file is an example. Delete it at will. */
 
-import Layout from "./Layout";
+import Headline from "../components/Headline";
+import Layout from "../components/Layout";
 
 /**
  * @param {import("./types").RouteProps} props
@@ -12,9 +13,9 @@ export default function ResourceNotFoundPage({}) {
       description="The resource you requested has not been found at the specified
     address."
     >
-      <h2>
+      <Headline level={2}>
         The resource you requested has not been found at the specified address.
-      </h2>
+      </Headline>
       <a href="/">Go to homepage</a>
     </Layout>
   );
