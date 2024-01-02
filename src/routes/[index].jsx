@@ -6,6 +6,12 @@ import Layout from "./Layout";
  * @param {import("./types").RouteProps} props
  */
 export default function Homepage({}) {
+  const cmds = [
+    "npx -y giget --install gh:jeasx/quickstart",
+    "cd jeasx-quickstart",
+    "npm run dev",
+  ];
+
   return (
     <Layout
       title="Jeasx - JSX with Ease"
@@ -17,15 +23,16 @@ export default function Homepage({}) {
       <main>
         <section>
           <h2>Quickstart</h2>
-          <textarea
-            readonly
-            rows="3"
-            onfocus="setTimeout(() => this.select(), 100)"
-          >
-            {`npx giget --install gh:jeasx/quickstart\ncd jeasx-quickstart\nnpm run dev`}
+          <textarea readonly disabled rows="3">
+            {cmds.join("\n")}
           </textarea>
+          <button
+            onclick={`navigator.clipboard.writeText('${cmds.join(" && ")}')`}
+          >
+            Copy
+          </button>
           <hr />
-          <a href="https://github.com/jeasx/quickstart">Go to GitHub</a>
+          <a href="https://github.com/jeasx/quickstart">Visit code at GitHub</a>
         </section>
       </main>
     </Layout>
