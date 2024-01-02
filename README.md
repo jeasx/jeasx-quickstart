@@ -3,7 +3,7 @@
 ## Quickstart
 
 ```bash
-npx -y giget --install gh:jeasx/quickstart
-cd jeasx-quickstart
+npm create jeasx my-app
+cd my-app
 npm run dev
 ```

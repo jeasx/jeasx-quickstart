@@ -6,11 +6,7 @@ import Layout from "./Layout";
  * @param {import("./types").RouteProps} props
  */
 export default function Homepage({}) {
-  const cmds = [
-    "npx -y giget --install gh:jeasx/quickstart",
-    "cd jeasx-quickstart",
-    "npm run dev",
-  ];
+  const cmds = ["npm create jeasx", "cd jeasx-quickstart", "npm run dev"];
 
   return (
     <Layout
