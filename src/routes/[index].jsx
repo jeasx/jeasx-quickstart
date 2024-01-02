@@ -14,11 +14,12 @@ export default function Homepage({}) {
 
   return (
     <Layout
-      title="Jeasx - JSX with Ease"
-      description="How to get up and running with Jeasx in seconds."
+      title="jeasx - Quickstart"
+      description="Get up and running in seconds."
     >
       <header>
-        <h1>Jeasx - JSX with Ease</h1>
+        <h1>jeasx</h1>
+        <p>The power of server-side rendering with the ease of JSX</p>
       </header>
       <main>
         <section>
@@ -32,7 +33,9 @@ export default function Homepage({}) {
             Copy
           </button>
           <hr />
-          <a href="https://github.com/jeasx/quickstart">Visit code at GitHub</a>
+          <a href="https://github.com/jeasx/quickstart">
+            Visit repository at GitHub
+          </a>
         </section>
       </main>
     </Layout>
