@@ -1,7 +1,6 @@
 /* This file is an example. Delete it at will. */
 
 import { requestContext } from "@fastify/request-context";
-import Header from "./Header";
 
 export default function Layout({
   title = "",
@@ -25,12 +24,7 @@ export default function Layout({
           />
           <title>{title}</title>
         </head>
-        <body>
-          <Header>{title}</Header>
-          <main>
-            <section>{children}</section>
-          </main>
-        </body>
+        <body>{children}</body>
       </html>
     </>
   );

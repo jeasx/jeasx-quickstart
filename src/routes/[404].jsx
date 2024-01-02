@@ -1,6 +1,5 @@
 /* This file is an example. Delete it at will. */
 
-import Headline from "../components/Headline";
 import Layout from "../components/Layout";
 
 /**
@@ -13,10 +12,18 @@ export default function ResourceNotFoundPage({}) {
       description="The resource you requested has not been found at the specified
     address."
     >
-      <Headline level={2}>
-        The resource you requested has not been found at the specified address.
-      </Headline>
-      <a href="/">Go to homepage</a>
+      <header>
+        <h1>404 - Resource Not Found</h1>
+      </header>
+      <main>
+        <section>
+          <h2>
+            The resource you requested has not been found at the specified
+            address.
+          </h2>
+          <a href="/">Go to homepage</a>
+        </section>
+      </main>
     </Layout>
   );
 }

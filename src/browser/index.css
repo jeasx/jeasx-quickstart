@@ -20,6 +20,7 @@ body {
 }
 
 header {
+  margin-bottom: 1rem;
   box-shadow: var(--box-shadow);
   background-color: var(--color-background);
   padding: 1rem;
@@ -63,4 +64,19 @@ a {
   &:hover {
     transform: scale(1.05);
   }
+}
+
+hr {
+  border: unset;
+  width: 100%;
+}
+
+textarea {
+  padding: 1rem;
+  width: 30em;
+  overflow: hidden;
+  resize: none;
+  font-size: 12px;
+  font-family: monospace;
+  white-space: pre;
 }

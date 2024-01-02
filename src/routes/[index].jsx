@@ -7,10 +7,27 @@ import Layout from "../components/Layout";
  */
 export default function Homepage({}) {
   return (
-    <Layout title="Jeasx - JSX with Ease" description="Welcome to the homepage">
-      {[1, 2, 3].map((num) => (
-        <a href={`/subfolder/page-${num}`}>Page {num}</a>
-      ))}
+    <Layout
+      title="Jeasx - JSX with Ease"
+      description="How to get up and running with Jeasx in seconds."
+    >
+      <header>
+        <h1>Jeasx - JSX with Ease</h1>
+      </header>
+      <main>
+        <section>
+          <h2>Quickstart</h2>
+          <textarea
+            readonly
+            rows="3"
+            onfocus="setTimeout(() => this.select(), 100)"
+          >
+            {`npx giget --install gh:jeasx/quickstart\ncd jeasx-quickstart\nnpm run dev`}
+          </textarea>
+          <hr />
+          <a href="https://github.com/jeasx/quickstart">Go to GitHub</a>
+        </section>
+      </main>
     </Layout>
   );
 }
