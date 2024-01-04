@@ -7,6 +7,6 @@
     "dev": "jeasx dev"
   },
   "dependencies": {
-    "jeasx": "0.0.4"
+    "jeasx": "0.0.5"
   }
 }
