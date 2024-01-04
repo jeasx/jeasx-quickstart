@@ -3,7 +3,7 @@
 ## Quickstart
 
 ```bash
-npm create jeasx my-app
+npm create jeasx@latest my-app
 cd my-app
 npm run dev
 ```
