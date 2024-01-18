@@ -1,6 +1,7 @@
 import serverless from "jeasx/serverless.js";
 
+await serverless.ready();
+
 export default async (req, res) => {
-  await serverless.ready();
   serverless.server.emit("request", req, res);
 };
