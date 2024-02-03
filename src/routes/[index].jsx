@@ -24,9 +24,7 @@ export default function Homepage({}) {
       <main>
         <section>
           <h2>Quickstart</h2>
-          <textarea readonly disabled rows="3">
-            {cmds.join("\n")}
-          </textarea>
+          <code>{cmds.join("\n")}</code>
           <button
             onclick={`navigator.clipboard.writeText('${cmds.join(" && ")}')`}
           >

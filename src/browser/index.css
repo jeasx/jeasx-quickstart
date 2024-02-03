@@ -7,7 +7,6 @@
   --color-background: #ffffff;
   --box-shadow: 0 0.275rem 0.75rem -0.0625rem var(--color-shadow),
     0 0.125rem 0.4rem -0.0625rem var(--color-shadow);
-  --gradient: radial-gradient(circle, var(--color-primary) 75%, white 100%);
 }
 
 *,
@@ -53,7 +52,7 @@ h1 {
 
 h2 {
   margin: 1rem;
-  background: var(--gradient);
+  background-color: var(--color-primary);
   padding: 1rem;
   width: 100%;
   color: var(--color-background);
@@ -68,7 +67,6 @@ p {
 a {
   transition: 0.2s transform ease-in-out;
   margin: 1rem;
-  box-shadow: var(--box-shadow);
   border-radius: 0.5rem;
   padding: 1rem;
   color: var(--color-primary);
@@ -88,7 +86,8 @@ hr {
   width: 100%;
 }
 
-textarea {
+code {
+  border: 1px solid var(--color-shadow);
   padding: 1rem;
   width: 20em;
   overflow: hidden;
