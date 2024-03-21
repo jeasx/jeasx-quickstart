@@ -7,8 +7,8 @@ import serverless from "jeasx/serverless";
 type FastifyServer = typeof serverless;
 
 type RouteProps = {
-  request: FastifyRequest;
-  reply: FastifyReply;
+  request?: FastifyRequest;
+  reply?: FastifyReply;
 };
 
 declare module "@fastify/request-context" {
