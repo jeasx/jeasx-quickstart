@@ -1,6 +1,5 @@
 /* This file is an example. Delete it at will. */
 
-
 /**
  * @param {import("./types").RouteProps} props
  */
@@ -20,5 +19,17 @@ export default function RootGuard({ request, reply }) {
       ? await prettier.format(payload, { parser: "html" })
       : payload;
   };
+  */
+
+  // You can override #jsxToString() via 'this' context.
+  // This allows you to modify or replace JSX components.
+  // See example in <https://github.com/jeasx/jsx-async-runtime>
+  /*  
+    import { jsxToString } from "jsx-async-runtime";
+    ...
+    this.jsxToString = (jsxElement) => {
+      console.log(JSON.stringify(jsxElement, null, 2));
+      return jsxToString.call(this, jsxElement)
+    }
   */
 }
