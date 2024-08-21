@@ -1,0 +1,11 @@
+#
+# This file is an example. Delete it at will.
+#
+**
+!/public/
+!/src/
+!.env
+!ecosystem.config.cjs
+!package-lock.json
+!package.json
+!tsconfig.json
