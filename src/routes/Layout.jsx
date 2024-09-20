@@ -8,14 +8,11 @@ export default function Layout({
   description = "",
   children = [],
 }) {
-  const [path] = this.request.url.split("?", 1);
-
   return (
     <>
       {`<!DOCTYPE html>`}
       <html lang="en">
         <head>
-          <base href={`${path.endsWith("/") ? path : path + "/"}`} />
           <meta charset="utf-8" />
           <meta name="description" content={description} />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
