@@ -25,11 +25,7 @@ export default function Homepage({}) {
         <section>
           <h2>Quickstart</h2>
           <code>{cmds.join("\n")}</code>
-          <button
-            onclick={`navigator.clipboard.writeText('${cmds.join(" && ")}')`}
-          >
-            Copy
-          </button>
+          <button data-clipboard={cmds.join(" && ")}>Copy</button>
           <hr />
           <a href="https://github.com/jeasx/quickstart">
             Visit repository at GitHub
