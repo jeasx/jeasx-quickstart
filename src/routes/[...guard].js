@@ -1,12 +1,17 @@
 /* This file is an example. Delete it at will. */
 
+import { escapeEntities } from "jsx-async-runtime";
+
 /**
  * @param {import("./types").RouteProps} props
  */
 export default function RootGuard({ request, reply }) {
   // Provide request/reply via this context.
-  this.request = request
+  this.request = request;
   this.reply = reply;
+
+  // Provide a helper to escape html entities
+  this.escape = escapeEntities;
 
   // Set optional response handler in request context.
   // Below is an example of how to prettify resulting HTML.

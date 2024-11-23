@@ -3,6 +3,7 @@
 import Layout from "./Layout";
 
 /**
+ * @this {import("./types").ThisContext}
  * @param {import("./types").RouteProps} props
  */
 export default function Homepage({}) {
@@ -24,12 +25,10 @@ export default function Homepage({}) {
       <main>
         <section>
           <h2>Quickstart</h2>
-          <code>{cmds.join("\n")}</code>
-          <button data-clipboard={cmds.join(" && ")}>Copy</button>
+          <code>{this.escape(cmds.join("\n"))}</code>
+          <button data-clipboard={this.escape(cmds.join(" && "))}>Copy</button>
           <hr />
-          <a href="https://github.com/jeasx/quickstart">
-            Visit repository at GitHub
-          </a>
+          <a href="https://www.jeasx.dev">Learn more about Jeasx</a>
         </section>
       </main>
     </Layout>

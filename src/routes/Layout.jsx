@@ -1,7 +1,7 @@
 /* This file is an example. Delete it at will. */
 
 /**
- * @this {import("./types").RouteProps}
+ * @this {import("./types").ThisContext}
  */
 export default function Layout({
   title = "",
