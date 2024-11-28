@@ -8,15 +8,7 @@ export default function Layout({
   description = "",
   children = [],
 }) {
-  // Shortcut for request path
   const path = this.request.path;
-
-  // Create a version number to cache-bust js & css files
-  // at runtime for development and at build time for production.
-  const version =
-    process.env.NODE_ENV === "development"
-      ? Date.now().toString(36)
-      : process.env.BUILD_TIME;
 
   return (
     <>
@@ -27,8 +19,11 @@ export default function Layout({
           <meta charset="utf-8" />
           <meta name="description" content={description} />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
-          <link rel="stylesheet" href={`/index.css?${version}`} />
-          <script type="module" src={`/index.js?${version}`} />
+          <link
+            rel="stylesheet"
+            href={`/index.css?${process.env.BUILD_TIME}`}
+          />
+          <script type="module" src={`/index.js?${process.env.BUILD_TIME}`} />
           <title>{title}</title>
         </head>
         <body>{children}</body>
