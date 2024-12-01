@@ -1,6 +1,4 @@
-#
 # This file is an example. Delete it at will.
-#
 FROM node:lts-alpine
 
 USER node
