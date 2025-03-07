@@ -6,7 +6,7 @@
 export default function Layout({
   title = "",
   description = "",
-  children = [],
+  children = undefined,
 }) {
   const path = this.request.path;
 
