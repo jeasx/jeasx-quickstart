@@ -10,4 +10,4 @@ npm run dev
 
 ## Deployment
 
-You can deploy the project either via a node server (use `npm start`) or in a serverless environment. The serverless configuration for deploying to [Vercel](https://vercel.com/) is already included.
+You can deploy the project either as node server (use `npm start`, see Dockerfile) or in a serverless environment. The serverless configuration for deploying to [Vercel](https://vercel.com/) is already included.
