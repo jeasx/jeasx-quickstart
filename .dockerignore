@@ -5,6 +5,7 @@
 !/public/
 !/src/
 !.env
+!.npmrc
 !package-lock.json
 !package.json
 !tsconfig.json
