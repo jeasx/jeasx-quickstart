@@ -4,7 +4,8 @@
   "scripts": {
     "start": "jeasx start",
     "build": "jeasx build",
-    "dev": "jeasx dev"
+    "dev": "jeasx dev",
+    "clean": "jeasx clean"
   },
   "dependencies": {
     "jeasx": "1.6.3"
