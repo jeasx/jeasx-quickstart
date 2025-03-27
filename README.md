@@ -1,4 +1,4 @@
-# jeasx - The power of server-side rendering with the ease of JSX
+# Jeasx - The power of server-side rendering with the ease of JSX
 
 ## Quickstart
 

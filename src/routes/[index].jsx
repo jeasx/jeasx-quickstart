@@ -15,11 +15,11 @@ export default function Homepage({}) {
 
   return (
     <Layout
-      title="jeasx - Quickstart"
+      title="Jeasx - Quickstart"
       description="Get up and running in seconds."
     >
       <header>
-        <h1>jeasx</h1>
+        <h1>Jeasx</h1>
         <p>The power of server-side rendering with the ease of JSX</p>
       </header>
       <main>
