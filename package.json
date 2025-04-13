@@ -1,5 +1,5 @@
 {
-  "name": "jeasx-quickstart",
+  "name": "neoskop-job-server",
   "type": "module",
   "scripts": {
     "start": "jeasx start",

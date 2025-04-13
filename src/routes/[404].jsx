@@ -1,5 +1,3 @@
-/* This file is an example. Delete it at will. */
-
 import Layout from "./Layout";
 
 /**
@@ -7,11 +5,7 @@ import Layout from "./Layout";
  */
 export default function ResourceNotFoundPage({}) {
   return (
-    <Layout
-      title="404 - Resource Not Found"
-      description="The resource you requested has not been found at the specified
-    address."
-    >
+    <Layout title="404 - Resource Not Found">
       <header>
         <h1>404 - Resource Not Found</h1>
       </header>

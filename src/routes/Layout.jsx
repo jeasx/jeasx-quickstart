@@ -1,13 +1,7 @@
-/* This file is an example. Delete it at will. */
-
 /**
  * @this {import("./types").ThisContext}
  */
-export default function Layout({
-  title = "",
-  description = "",
-  children = undefined,
-}) {
+export default function Layout({ title = "", children = undefined }) {
   const path = this.request.path;
 
   return (
@@ -17,7 +11,6 @@ export default function Layout({
         <head>
           <base href={`${path.endsWith("/") ? path : path + "/"}`} />
           <meta charset="utf-8" />
-          <meta name="description" content={description} />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <link
             rel="stylesheet"

@@ -1,12 +1,11 @@
-# This file is an example. Delete it at will.
-FROM node:lts-alpine
+FROM imbios/bun-node:22-alpine
 
 USER node
 WORKDIR /home/node
 
 COPY --chown=node:node package.json package-lock.json ./
-RUN npm install && npm cache clean --force
+RUN npm install --omit=dev && npm cache clean --force
 COPY --chown=node:node . ./
 
 RUN npm run build
-CMD ["npm","start"]
+CMD ["bun","-b","start"]
