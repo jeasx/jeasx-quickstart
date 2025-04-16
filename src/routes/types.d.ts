@@ -1,3 +1,5 @@
+/* This file is an example. Delete it at will. */
+
 import { FastifyReply } from "fastify/types/reply";
 import { FastifyRequest } from "fastify/types/request";
 import serverless from "jeasx/serverless";
@@ -9,4 +11,6 @@ type RouteProps = {
   reply?: FastifyReply;
 };
 
-type ThisContext = RouteProps;
+type ThisContext = RouteProps & {
+  escape: (str: string) => string;
+};
