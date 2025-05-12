@@ -18,11 +18,30 @@ export default function RootGuard({ request, reply }) {
   /*
   import * as prettier from "prettier";
   ...
-  this.response = async (payload) => {
+  this.responseHandler = async (payload) => {
     return typeof payload === "string" &&
       String(reply.getHeader("content-type")).startsWith("text/html")
       ? await prettier.format(payload, { parser: "html" })
       : payload;
+  };
+  */
+
+  // Set optional error handler to provide user friendly error pages.
+  // Default http response status is 500,
+  // you can override it with this.reply.status(...).
+  /*
+  this.errorHandler = async (error) => {
+    // You can decide if you want to create a log entry.
+    // console.error("❌", error);
+    return (
+      <Layout title="Internal Server Error">
+        <h1>Internal Server Error</h1>
+        <p>
+          We're sorry, but something went wrong with your request. Please try
+          again later. <code>{error.toString()}</code>
+        </p>
+      </Layout>
+    );
   };
   */
 
