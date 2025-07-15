@@ -6,7 +6,7 @@ import Layout from "./Layout";
  * @this {import("./types").ThisContext}
  * @param {import("./types").RouteProps} props
  */
-export default function Homepage({}) {
+export default function ({}) {
   const cmds = [
     "npm create jeasx@latest",
     "cd jeasx-quickstart",

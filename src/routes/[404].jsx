@@ -5,7 +5,7 @@ import Layout from "./Layout";
 /**
  * @param {import("./types").RouteProps} props
  */
-export default function ResourceNotFoundPage({}) {
+export default function ({}) {
   return (
     <Layout
       title="404 - Resource Not Found"
