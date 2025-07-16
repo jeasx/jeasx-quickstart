@@ -7,8 +7,8 @@ import Layout from "./Layout";
  * @param {import("./types").RouteProps} props
  */
 export default async function ({ request, reply }) {
-  const [, id] = request.path.split("/");
-  const response = await fetch(`https://dummyjson.com/recipes/${id}`);
+  const [id] = request.path.split("-", 1);
+  const response = await fetch(`https://dummyjson.com/recipes${id}`);
 
   if (!response.ok) {
     reply.status(404);

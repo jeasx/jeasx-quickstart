@@ -39,7 +39,7 @@ export default async function ({}) {
               }) => (
                 <tr>
                   <td>
-                    <a href={`${id}/${slugify(name)}`}>{name}</a>
+                    <a href={`${id}-${slugify(name)}`}>{name}</a>
                   </td>
                   <td>{cuisine}</td>
                   <td>{difficulty}</td>
