@@ -39,7 +39,7 @@ export default async function ({}) {
               }) => (
                 <tr>
                   <td>
-                    <a href={`${id}`}>{name}</a>
+                    <a href={`${id}/${slugify(name)}`}>{name}</a>
                   </td>
                   <td>{cuisine}</td>
                   <td>{difficulty}</td>
@@ -55,4 +55,11 @@ export default async function ({}) {
       </main>
     </Layout>
   );
+}
+
+function slugify(str) {
+  return str
+    .toLowerCase()
+    .replace(/[\s\W-]+/g, "-")
+    .replace(/^-+|-+$/g, "");
 }

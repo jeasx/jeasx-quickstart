@@ -7,7 +7,8 @@ import Layout from "./Layout";
  * @param {import("./types").RouteProps} props
  */
 export default async function ({ request, reply }) {
-  const response = await fetch(`https://dummyjson.com/recipes${request.path}`);
+  const [, id] = request.path.split("/");
+  const response = await fetch(`https://dummyjson.com/recipes/${id}`);
 
   if (!response.ok) {
     reply.status(404);
@@ -20,7 +21,7 @@ export default async function ({ request, reply }) {
   return (
     <Layout title={name} description={`${name} - ${cuisine} - ${difficulty} `}>
       <main>
-        <a href="..">&laquo; Back</a>
+        <a href="/">&laquo; Back</a>
         <article>
           <h1>{name}</h1>
           <p>
