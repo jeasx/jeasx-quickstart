@@ -26,7 +26,18 @@ export default function Layout({
           <script type="module" src={`/index.js?${process.env.BUILD_TIME}`} />
           <title>{title}</title>
         </head>
-        <body>{children}</body>
+        <body>
+          {children}
+          <footer>
+            <hr />
+            <h5>Jeasx - Quickstart</h5>
+            <p>
+              Explore this sample application to quickly get started with Jeasx.
+              Visit the <a href="https://www.jeasx.dev">Jeasx website</a> to
+              learn more about the framework.
+            </p>
+          </footer>
+        </body>
       </html>
     </>
   );

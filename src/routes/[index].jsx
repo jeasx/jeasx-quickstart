@@ -6,30 +6,52 @@ import Layout from "./Layout";
  * @this {import("./types").ThisContext}
  * @param {import("./types").RouteProps} props
  */
-export default function ({}) {
-  const cmds = [
-    "npm create jeasx@latest",
-    "cd jeasx-quickstart",
-    "npm run dev",
-  ];
+export default async function ({}) {
+  const { recipes } = await (
+    await fetch("https://dummyjson.com/recipes")
+  ).json();
 
   return (
-    <Layout
-      title="Jeasx - Quickstart"
-      description="Get up and running in seconds."
-    >
-      <header>
-        <h1>Jeasx</h1>
-        <p>The power of server-side rendering with the ease of JSX</p>
-      </header>
+    <Layout title="Recipes" description="Have fun cooking.">
       <main>
-        <section>
-          <h2>Quickstart</h2>
-          <code>{this.escape(cmds.join("\n"))}</code>
-          <button data-clipboard={this.escape(cmds.join(" && "))}>Copy</button>
-          <hr />
-          <a href="https://www.jeasx.dev">Learn more about Jeasx</a>
-        </section>
+        <h1>Recipes</h1>
+        <p>Here you will find some exciting recipes to cook at home.</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Cuisine</th>
+              <th>Difficulty</th>
+              <th>Minutes</th>
+              <th>Image</th>
+            </tr>
+          </thead>
+          <tbody>
+            {recipes.map(
+              ({
+                id,
+                name,
+                cuisine,
+                difficulty,
+                image,
+                prepTimeMinutes,
+                cookTimeMinutes,
+              }) => (
+                <tr>
+                  <td>
+                    <a href={`${id}`}>{name}</a>
+                  </td>
+                  <td>{cuisine}</td>
+                  <td>{difficulty}</td>
+                  <td>{prepTimeMinutes + cookTimeMinutes} min</td>
+                  <td>
+                    <img src={image} height="50" width="50" loading="lazy" />
+                  </td>
+                </tr>
+              )
+            )}
+          </tbody>
+        </table>
       </main>
     </Layout>
   );

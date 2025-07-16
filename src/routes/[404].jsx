@@ -12,17 +12,13 @@ export default function ({}) {
       description="The resource you requested has not been found at the specified
     address."
     >
-      <header>
-        <h1>404 - Resource Not Found</h1>
-      </header>
       <main>
-        <section>
-          <h2>
-            The resource you requested has not been found at the specified
-            address.
-          </h2>
-          <a href="/">Go to homepage</a>
-        </section>
+        <h1>404 - Resource Not Found</h1>
+        <p>
+          The resource you requested has not been found at the specified
+          address.
+        </p>
+        <a href="/">Go to homepage</a>
       </main>
     </Layout>
   );
