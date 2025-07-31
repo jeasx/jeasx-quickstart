@@ -21,7 +21,9 @@ export default async function ({ request, reply }) {
   return (
     <Layout title={name} description={`${name} - ${cuisine} - ${difficulty} `}>
       <main>
-        <a href="javascript:history.back()">&laquo; Back</a>
+        <a href="/" onclick="history.back(); return false;">
+          &laquo; Back
+        </a>
         <article>
           <h1>{name}</h1>
           <p>
