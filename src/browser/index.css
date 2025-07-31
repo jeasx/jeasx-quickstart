@@ -5,3 +5,15 @@
 @view-transition {
   navigation: auto;
 }
+
+table {
+  width: 100%;
+}
+
+.wrap {
+  flex-wrap: wrap;
+}
+
+.active {
+  font-weight: bold;
+}
