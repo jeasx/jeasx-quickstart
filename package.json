@@ -8,6 +8,6 @@
     "clean": "jeasx clean"
   },
   "dependencies": {
-    "jeasx": "1.8.6"
+    "jeasx": "1.9.0"
   }
 }
