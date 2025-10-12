@@ -12,5 +12,5 @@ type RouteProps = {
 };
 
 type ThisContext = RouteProps & {
-  escape: (str: string) => string;
+  // add additional attributes
 };

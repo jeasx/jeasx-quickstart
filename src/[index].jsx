@@ -13,8 +13,7 @@ const CUISINES = [...new Set(RECIPES.map(({ cuisine }) => cuisine))].toSorted();
  * @param {import("./types").RouteProps} props
  */
 export default async function ({ request, reply }) {
-  // Escape user input early so we are safe to use it later
-  const $cuisine = this.escape(request.query["cuisine"] || "");
+  const $cuisine = request.query["cuisine"] || "";
 
   return (
     <Layout

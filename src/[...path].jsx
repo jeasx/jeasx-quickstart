@@ -40,10 +40,7 @@ export default async function ({ request, reply }) {
                   <li>{ingredient}</li>
                 ))}
               </ul>
-              <button
-                type="button"
-                data-clipboard={this.escape(ingredients.join("\n"))}
-              >
+              <button type="button" data-clipboard={ingredients.join("\n")}>
                 Copy to clipboard
               </button>
             </div>
