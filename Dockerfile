@@ -1,5 +1,5 @@
 # This file is an example. Delete it at will.
-FROM node:lts-alpine
+FROM node:24-alpine
 
 USER node
 WORKDIR /home/node
@@ -8,5 +8,5 @@ COPY --chown=node:node package.json package-lock.json ./
 RUN npm ci --omit=dev && npm cache clean --force
 COPY --chown=node:node . ./
 
-RUN npm run build
-CMD ["npm","start"]
+RUN node --run build
+CMD ["node","--run","start"]
