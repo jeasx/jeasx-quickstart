@@ -1,5 +1,7 @@
 # Jeasx - The power of server-side rendering with the ease of JSX
 
+See full documentation at <https://www.jeasx.dev>.
+
 ## Quickstart
 
 ```bash
@@ -9,6 +11,22 @@ npm run build
 npm run dev
 ```
 
-## Deployment
+If you omit `my-app`, the project will be cloned into a folder called `jeasx-quickstart`.
 
-You can deploy the project either as node server (use `npm start`, see Dockerfile) or in a serverless environment. The serverless configuration for deploying to [Vercel](https://vercel.com/) is already included.
+## Options for bootstrapping a project
+
+### Docker
+
+Bootstrap a new project with support for Docker.
+
+```bash
+npm create jeasx@latest -- my-app --with-docker
+```
+
+### Vercel
+
+Bootstrap a new project with support for Vervel.
+
+```bash
+npm create jeasx@latest -- my-app --with-vercel
+```
