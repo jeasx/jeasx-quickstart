@@ -5,6 +5,7 @@
 !/public/
 !/src/
 !.env
+!.env.js
 !.npmrc
 !package-lock.json
 !package.json
