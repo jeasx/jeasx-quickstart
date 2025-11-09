@@ -9,15 +9,21 @@ export default function ({ request, reply }) {
   this.reply = reply;
 
   // Set optional response handler in request context.
-  // Below is an example of how to prettify resulting HTML.
+  // Below is an example of how to gzip the resulting payload.
   /*
-  import * as prettier from "prettier";
-  ...
-  this.responseHandler = async (payload) => {
-    return typeof payload === "string" &&
-      String(reply.getHeader("content-type")).startsWith("text/html")
-      ? await prettier.format(payload, { parser: "html" })
-      : payload;
+  import { promisify } from "node:util";
+  import { gzip } from "node:zlib";
+  
+  this.responseHandler = (payload) => {
+    if (
+      typeof payload === "string" &&
+      request.headers["accept-encoding"]?.includes("gzip")
+    ) {
+      reply.header("content-encoding", "gzip");
+      return promisify(gzip)(payload);
+    } else {
+      return payload;
+    }
   };
   */
 
