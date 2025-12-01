@@ -4,17 +4,26 @@ const NODE_ENV_IS_DEVELOPMENT = process.env.NODE_ENV === "development";
 
 // https://www.jeasx.dev/configuration
 export default {
-  FASTIFY_DISABLE_REQUEST_LOGGING: NODE_ENV_IS_DEVELOPMENT,
-  // FASTIFY_BODY_LIMIT: 1048576,
-  // FASTIFY_REWRITE_URL: (/** @type import("fastify").FastifyRequest */ req) =>
-  //   req.url.replace(/^\/jeasx/, ""),
-  // FASTIFY_STATIC_HEADERS: NODE_ENV_IS_DEVELOPMENT
-  //   ? {
-  //       "": { "Cache-Control": "public,max-age=60" },
-  //       ".js": { "Cache-Control": "no-store" },
-  //       ".css": { "Cache-Control": "no-store" },
-  //     }
-  //   : { "": { "Cache-Control": "public,max-age=31536000,s-maxage=31536000" } },
   // ESBUILD_BROWSER_TARGET: "chrome130,edge130,firefox130,safari18",
-  // JEASX_ROUTE_CACHE_LIMIT: 10000,
+
+  /** @type import("fastify").FastifyServerOptions */
+  FASTIFY_SERVER_OPTIONS: {
+    disableRequestLogging: NODE_ENV_IS_DEVELOPMENT,
+    bodyLimit: 2 * 1024 * 1024,
+    // rewriteUrl: (req) => String(req.url).replace(/^\/jeasx/, ""),
+  },
+
+  /** @type import("@fastify/static").FastifyStaticOptions */
+  FASTIFY_STATIC_OPTIONS: {
+    maxAge: NODE_ENV_IS_DEVELOPMENT ? 0 : "365d",
+  },
+
+  /** @type import("@fastify/cookie").FastifyCookieOptions */
+  // FASTIFY_COOKIE_OPTIONS: {},
+
+  /** @type import("@fastify/formbody").FastifyFormbodyOptions */
+  // FASTIFY_FORMBODY_OPTIONS: {},
+
+  /** @type import("@fastify/multipart").FastifyMultipartOptions */
+  // FASTIFY_MULTIPART_OPTIONS: {},
 };
