@@ -18,64 +18,60 @@ export default async function ({ request, reply }) {
   return (
     <Layout
       title={`${$cuisine} Recipes`.trim()}
-      description={`Have fun cooking ${$cuisine.toLowerCase()} recipes`}
-    >
-      <main>
-        <h1>{$cuisine} Recipes</h1>
-        <p>Here you will find some exciting recipes to cook at home.</p>
-        <div class="row wrap">
-          <div class="col">
-            {CUISINES.map((cuisine) => (
-              <>
-                <a
-                  href={cuisine !== $cuisine ? `?cuisine=${cuisine}` : ""}
-                  class={{ active: cuisine === $cuisine }}
-                >
-                  {cuisine}
-                </a>{" "}
-              </>
-            ))}
-          </div>
+      description={`Have fun cooking ${$cuisine.toLowerCase()} recipes`}>
+      <h1>{$cuisine} Recipes</h1>
+      <p>Here you will find some exciting recipes to cook at home.</p>
+      <div class="row wrap">
+        <div class="col">
+          {CUISINES.map((cuisine) => (
+            <>
+              <a
+                href={cuisine !== $cuisine ? `?cuisine=${cuisine}` : ""}
+                class={{ active: cuisine === $cuisine }}>
+                {cuisine}
+              </a>{" "}
+            </>
+          ))}
         </div>
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Cuisine</th>
-              <th>Difficulty</th>
-              <th>Minutes</th>
-              <th>Image</th>
-            </tr>
-          </thead>
-          <tbody>
-            {RECIPES.filter(
-              ({ cuisine }) => !$cuisine || $cuisine === cuisine
-            ).map(
-              ({
-                id,
-                name,
-                cuisine,
-                difficulty,
-                image,
-                prepTimeMinutes,
-                cookTimeMinutes,
-              }) => (
-                <tr>
-                  <td>
-                    <a href={`${id}-${slugify(name)}`}>{name}</a>
-                  </td>
-                  <td>{cuisine}</td>
-                  <td>{difficulty}</td>
-                  <td>{prepTimeMinutes + cookTimeMinutes} min</td>
-                  <td>
-                    <img src={image} height="50" width="50" loading="lazy" />
-                  </td>
-                </tr>
-              )
-            )}
-          </tbody>
-        </table>
-      </main>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Cuisine</th>
+            <th>Difficulty</th>
+            <th>Minutes</th>
+            <th>Image</th>
+          </tr>
+        </thead>
+        <tbody>
+          {RECIPES.filter(
+            ({ cuisine }) => !$cuisine || $cuisine === cuisine
+          ).map(
+            ({
+              id,
+              name,
+              cuisine,
+              difficulty,
+              image,
+              prepTimeMinutes,
+              cookTimeMinutes
+            }) => (
+              <tr>
+                <td>
+                  <a href={`${id}-${slugify(name)}`}>{name}</a>
+                </td>
+                <td>{cuisine}</td>
+                <td>{difficulty}</td>
+                <td>{prepTimeMinutes + cookTimeMinutes} min</td>
+                <td>
+                  <img src={image} height="50" width="50" loading="lazy" />
+                </td>
+              </tr>
+            )
+          )}
+        </tbody>
+      </table>
     </Layout>
   );
 }

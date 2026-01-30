@@ -6,7 +6,7 @@
 export default function Layout({
   title = "",
   description = "",
-  children = undefined,
+  children = undefined
 }) {
   const path = this.request.path;
 
@@ -27,7 +27,7 @@ export default function Layout({
           <title>{title}</title>
         </head>
         <body>
-          {children}
+          <main>{children}</main>
           <footer>
             <hr />
             <h5>Jeasx - Quickstart</h5>

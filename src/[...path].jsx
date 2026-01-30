@@ -20,39 +20,37 @@ export default async function ({ request, reply }) {
 
   return (
     <Layout title={name} description={`${name} - ${cuisine} - ${difficulty} `}>
-      <main>
-        <a href="/" onclick="history.back(); return false;">
-          &laquo; Back
-        </a>
-        <article>
-          <h1>{name}</h1>
-          <p>
-            {cuisine} / {difficulty}
-          </p>
-          <div class="row">
-            <div class="col">
-              <img src={image} alt={name} width="400" />
-            </div>
-            <div class="col">
-              <h2>Ingredients</h2>
-              <ul>
-                {ingredients.map((ingredient) => (
-                  <li>{ingredient}</li>
-                ))}
-              </ul>
-              <button type="button" data-clipboard={ingredients.join("\n")}>
-                Copy to clipboard
-              </button>
-            </div>
+      <a href="/" onclick="history.back(); return false;">
+        &laquo; Back
+      </a>
+      <article>
+        <h1>{name}</h1>
+        <p>
+          {cuisine} / {difficulty}
+        </p>
+        <div class="row">
+          <div class="col">
+            <img src={image} alt={name} width="400" />
           </div>
-          <h2>Instructions</h2>
-          <ol>
-            {instructions.map((instruction) => (
-              <li>{instruction}</li>
-            ))}
-          </ol>
-        </article>
-      </main>
+          <div class="col">
+            <h2>Ingredients</h2>
+            <ul>
+              {ingredients.map((ingredient) => (
+                <li>{ingredient}</li>
+              ))}
+            </ul>
+            <button type="button" data-clipboard={ingredients.join("\n")}>
+              Copy to clipboard
+            </button>
+          </div>
+        </div>
+        <h2>Instructions</h2>
+        <ol>
+          {instructions.map((instruction) => (
+            <li>{instruction}</li>
+          ))}
+        </ol>
+      </article>
     </Layout>
   );
 }
