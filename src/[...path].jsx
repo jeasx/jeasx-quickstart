@@ -15,8 +15,7 @@ export default async function ({ request, reply }) {
     return;
   }
 
-  const { name, ingredients, instructions, image, difficulty, cuisine } =
-    await response.json();
+  const { name, ingredients, instructions, image, difficulty, cuisine } = await response.json();
 
   return (
     <Layout title={name} description={`${name} - ${cuisine} - ${difficulty} `}>

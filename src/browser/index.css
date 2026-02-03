@@ -48,7 +48,10 @@ select {
   outline: none;
 }
 html {
-  font: 12pt/1.6 "Open Sans", Helvetica, sans-serif;
+  font:
+    12pt/1.6 "Open Sans",
+    Helvetica,
+    sans-serif;
 }
 body {
   position: relative;

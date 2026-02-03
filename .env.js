@@ -13,14 +13,14 @@ export default {
   /** @type import("fastify").FastifyServerOptions */
   FASTIFY_SERVER_OPTIONS: {
     disableRequestLogging: NODE_ENV_IS_DEVELOPMENT,
-    bodyLimit: 2 * 1024 * 1024
+    bodyLimit: 2 * 1024 * 1024,
     // rewriteUrl: (req) => String(req.url).replace(/\.html(?=\?|$)/, ""),
   },
 
   /** @type import("@fastify/static").FastifyStaticOptions */
   FASTIFY_STATIC_OPTIONS: {
-    maxAge: NODE_ENV_IS_DEVELOPMENT ? 0 : "365d"
-  }
+    maxAge: NODE_ENV_IS_DEVELOPMENT ? 0 : "365d",
+  },
 
   /** @type import("@fastify/cookie").FastifyCookieOptions */
   // FASTIFY_COOKIE_OPTIONS: {},

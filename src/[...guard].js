@@ -49,7 +49,7 @@ export default function ({ request, reply }) {
   // You can override #jsxToString() via 'this' context.
   // This allows you to modify or replace JSX components.
   // See example in <https://github.com/jeasx/jsx-async-runtime>
-  /*  
+  /*
     import { jsxToString } from "jsx-async-runtime";
     ...
     this.jsxToString = (jsxElement) => {
