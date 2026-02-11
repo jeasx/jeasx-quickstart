@@ -1,5 +1,5 @@
 # This file is an example. Delete it at will.
-FROM node:lts-alpine
+FROM node:current-alpine
 
 USER node
 WORKDIR /home/node
