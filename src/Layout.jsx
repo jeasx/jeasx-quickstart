@@ -17,7 +17,7 @@ export default function Layout({ title = "", description = "", children = undefi
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <link rel="stylesheet" href={`/index.css?${process.env.BUILD_TIME}`} />
           <script type="module" src={`/index.js?${process.env.BUILD_TIME}`} />
-          <title>{title}</title>
+          <title>{title} | Jeasx - JSX with ease</title>
         </head>
         <body>
           <main>{children}</main>
