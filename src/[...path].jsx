@@ -19,7 +19,7 @@ export default async function ({ request, reply }) {
 
   return (
     <Layout title={name} description={`${name} - ${cuisine} - ${difficulty} `}>
-      <a href="/" onclick="history.back(); return false;">
+      <a href="/" data-js-back>
         &laquo; Back
       </a>
       <article>
@@ -38,7 +38,7 @@ export default async function ({ request, reply }) {
                 <li>{ingredient}</li>
               ))}
             </ul>
-            <button type="button" data-clipboard={ingredients.join("\n")}>
+            <button type="button" data-js-clipboard={ingredients.join("\n")}>
               Copy to clipboard
             </button>
           </div>
