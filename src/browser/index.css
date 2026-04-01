@@ -13,7 +13,11 @@ table {
 }
 
 .active {
-  font-weight: bold;
+  color: blueviolet;
+}
+
+a:hover {
+  text-decoration: underline;
 }
 
 /* Classless.css v1.1 (Tiny Inline Version)*/
