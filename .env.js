@@ -1,4 +1,9 @@
 // This file is an example. Delete it at will.
+//
+// To edit .env.js with VSCode as JavaScript file,
+// you should add the following config to your settings.
+//
+// "files.associations": {".env.js": "javascript"}
 
 const NODE_ENV_IS_DEVELOPMENT = process.env.NODE_ENV === "development";
 
