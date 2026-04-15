@@ -22,7 +22,7 @@ export default {
 
   /** @type {() => import("fastify").FastifyServerOptions} */
   FASTIFY_SERVER_OPTIONS: () => ({
-    disableRequestLogging: NODE_ENV_IS_DEVELOPMENT,
+    logger: { level: NODE_ENV_IS_DEVELOPMENT ? "error" : "info" },
   }),
 
   /** @type {() => import("@fastify/static").FastifyStaticOptions} */
