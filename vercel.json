@@ -12,5 +12,6 @@
     "api/vercel.js": {
       "includeFiles": "./**/*"
     }
-  }
+  },
+  "outputDirectory": "api/public"
 }
