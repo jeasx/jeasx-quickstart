@@ -13,9 +13,10 @@ export default {
   // ESBUILD_SERVER_OPTIONS: () => ({}),
 
   /** @type {() => import("esbuild").BuildOptions} */
-  // ESBUILD_BROWSER_OPTIONS: () => ({
-  //   target: ["chrome130", "edge130", "firefox130", "safari18"],
-  // }),
+  ESBUILD_BROWSER_OPTIONS: () => ({
+    external: ["*.woff2"], // Exclude files in /public from build
+    target: ["chrome130", "edge130", "firefox130", "safari18"],
+  }),
 
   /** @type {(fastify: import("fastify").FastifyInstance) => import("fastify").FastifyInstance} */
   // FASTIFY_SERVER: (fastify) => fastify,
