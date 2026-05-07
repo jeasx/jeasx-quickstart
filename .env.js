@@ -14,7 +14,7 @@ export default {
 
   /** @type {() => import("esbuild").BuildOptions} */
   ESBUILD_BROWSER_OPTIONS: () => ({
-    external: ["*.woff2"], // Ignore links to woff2-fonts in CSS files.
+    external: ["*.woff2"],
     target: ["chrome130", "edge130", "firefox130", "safari18"],
   }),
 
