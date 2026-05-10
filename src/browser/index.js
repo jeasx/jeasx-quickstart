@@ -3,7 +3,9 @@
 document.querySelectorAll("[data-js-clipboard]").forEach((el) => {
   el.addEventListener("click", (e) => {
     e.preventDefault();
-    navigator.clipboard.writeText(el.getAttribute("data-js-clipboard"));
+    if (confirm("Copy to clipboard?")) {
+      navigator.clipboard.writeText(el.getAttribute("data-js-clipboard"));
+    }
   });
 });
 

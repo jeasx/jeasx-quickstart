@@ -1,5 +1,6 @@
 /* This file is an example. Delete it at will. */
 
+import Clipboard from "./components/Clipboard";
 import Layout from "./Layout";
 
 /**
@@ -33,17 +34,16 @@ export default async function ({ request, reply }) {
           </div>
           <div class="col">
             <h2>Ingredients</h2>
+            <Clipboard list={ingredients} />
             <ul>
               {ingredients.map((ingredient) => (
                 <li>{ingredient}</li>
               ))}
             </ul>
-            <button type="button" data-js-clipboard={ingredients.join("\n")}>
-              Copy to clipboard
-            </button>
           </div>
         </div>
         <h2>Instructions</h2>
+        <Clipboard list={instructions} />
         <ol>
           {instructions.map((instruction) => (
             <li>{instruction}</li>

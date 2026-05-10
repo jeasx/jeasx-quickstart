@@ -1,25 +1,31 @@
 // This file is an example. Delete it at will.
 //
-// To edit .env.js with VSCode as JavaScript file,
-// you should add the following config to your settings:
+// To edit .env.js as a JavaScript file,
+// you'll need to extend your editor settings:
 //
-// "files.associations": {".env.js": "javascript"}
+// VSCode:
+//  "files.associations": {".env.js": "javascript"}
 //
-// To edit .env.js with Zed as JavaScript file,
-// you should add the following config to your settings:
-//
-// "file_types": {"JavaScript": [".env.js"]}
+// Zed:
+//  "file_types": {"JavaScript": [".env.js"]}
 
 const NODE_ENV_IS_DEVELOPMENT = process.env.NODE_ENV === "development";
 
 // https://www.jeasx.dev/configuration
 export default {
   /** @type {() => import("esbuild").BuildOptions} */
-  // ESBUILD_SERVER_OPTIONS: () => ({}),
+  ESBUILD_SERVER_OPTIONS: () => ({
+    // The file loader returns a hashed file path
+    // when resource is imported in JavaScript.
+    loader: { ".svg": "file" },
+  }),
 
   /** @type {() => import("esbuild").BuildOptions} */
   ESBUILD_BROWSER_OPTIONS: () => ({
+    // Mark files as external, which are linked in JS or CSS,
+    // but should be ignored by esbuild.
     external: ["*.woff2"],
+    // Defaults to "esnext"
     target: ["chrome130", "edge130", "firefox130", "safari18"],
   }),
 
