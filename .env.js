@@ -1,9 +1,14 @@
 // This file is an example. Delete it at will.
 //
 // To edit .env.js with VSCode as JavaScript file,
-// you should add the following config to your settings.
+// you should add the following config to your settings:
 //
 // "files.associations": {".env.js": "javascript"}
+//
+// To edit .env.js with Zed as JavaScript file,
+// you should add the following config to your settings:
+//
+// "file_types": {"JavaScript": [".env.js"]}
 
 const NODE_ENV_IS_DEVELOPMENT = process.env.NODE_ENV === "development";
 
