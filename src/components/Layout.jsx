@@ -1,7 +1,7 @@
 /* This file is an example. Delete it at will. */
 
 /**
- * @this {import("./types").ThisContext}
+ * @this {import("../types").ThisContext}
  */
 export default function Layout({ title = "", description = "", children = undefined }) {
   const path = this.request.path;

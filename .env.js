@@ -14,18 +14,11 @@ const NODE_ENV_IS_DEVELOPMENT = process.env.NODE_ENV === "development";
 // https://www.jeasx.dev/configuration
 export default {
   /** @type {() => import("esbuild").BuildOptions} */
-  ESBUILD_SERVER_OPTIONS: () => ({
-    // The file loader returns a hashed file path
-    // when resource is imported in JavaScript.
-    loader: { ".svg": "file" },
-  }),
+  // ESBUILD_SERVER_OPTIONS: () => ({}),
 
   /** @type {() => import("esbuild").BuildOptions} */
   ESBUILD_BROWSER_OPTIONS: () => ({
-    // Mark files as external, which are linked in JS or CSS,
-    // but should be ignored by esbuild.
-    external: ["*.woff2"],
-    // Defaults to "esnext"
+    loader: { ".woff2": "file" },
     target: ["chrome130", "edge130", "firefox130", "safari18"],
   }),
 

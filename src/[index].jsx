@@ -1,14 +1,12 @@
 /* This file is an example. Delete it at will. */
 
-import Layout from "./Layout";
+import Layout from "./components/Layout";
 
-// Cache recipes in memory to avoid unnecessary API calls
+// Cache data in memory to avoid unnecessary API calls
 const RECIPES = (await (await fetch("https://dummyjson.com/recipes")).json()).recipes;
-
 const CUISINES = [...new Set(RECIPES.map(({ cuisine }) => cuisine))].toSorted();
 
 /**
- * @this {import("./types").ThisContext}
  * @param {import("./types").RouteProps} props
  */
 export default async function ({ request, reply }) {

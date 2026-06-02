@@ -1,10 +1,9 @@
 /* This file is an example. Delete it at will. */
 
 import Clipboard from "./components/Clipboard";
-import Layout from "./Layout";
+import Layout from "./components/Layout";
 
 /**
- * @this {import("./types").ThisContext}
  * @param {import("./types").RouteProps} props
  */
 export default async function ({ request, reply }) {
