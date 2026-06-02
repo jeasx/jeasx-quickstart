@@ -1,17 +1,5 @@
-// This file is an example. Delete it at will.
-//
-// To edit .env.js as a JavaScript file,
-// you'll need to extend your editor settings:
-//
-// VSCode:
-//  "files.associations": {".env.js": "javascript"}
-//
-// Zed:
-//  "file_types": {"JavaScript": [".env.js"]}
-
-const NODE_ENV_IS_DEVELOPMENT = process.env.NODE_ENV === "development";
-
 // https://www.jeasx.dev/configuration
+
 export default {
   /** @type {() => import("esbuild").BuildOptions} */
   // ESBUILD_SERVER_OPTIONS: () => ({}),
@@ -27,12 +15,12 @@ export default {
 
   /** @type {() => import("fastify").FastifyServerOptions} */
   FASTIFY_SERVER_OPTIONS: () => ({
-    logger: { level: NODE_ENV_IS_DEVELOPMENT ? "error" : "info" },
+    logger: { level: process.env.NODE_ENV === "development" ? "error" : "info" },
   }),
 
   /** @type {() => import("@fastify/static").FastifyStaticOptions} */
   FASTIFY_STATIC_OPTIONS: () => ({
-    maxAge: NODE_ENV_IS_DEVELOPMENT ? 0 : "365d",
+    maxAge: process.env.NODE_ENV === "development" ? 0 : "365d",
   }),
 
   /** @type {() => import("@fastify/cookie").FastifyCookieOptions} */
