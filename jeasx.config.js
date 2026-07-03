@@ -18,8 +18,8 @@ export default {
     logger: { level: process.env.NODE_ENV === "development" ? "error" : "info" },
   }),
 
-  /** @type {() => import("@fastify/static").FastifyStaticOptions} */
-  FASTIFY_STATIC_OPTIONS: () => ({
+  /** @type {() => import("@fastify/send").SendOptions} */
+  FASTIFY_SEND_OPTIONS: () => ({
     maxAge: process.env.NODE_ENV === "development" ? 0 : "365d",
   }),
 

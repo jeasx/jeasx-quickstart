@@ -7,7 +7,6 @@ See full documentation at <https://www.jeasx.dev>.
 ```bash
 npm create jeasx@latest my-app
 cd my-app
-npm run build
 npm run dev
 ```
 

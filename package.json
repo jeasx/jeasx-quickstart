@@ -8,7 +8,7 @@
     "clean": "jeasx clean"
   },
   "dependencies": {
-    "jeasx": "2.7.5"
+    "jeasx": "2.8.0"
   },
   "allowScripts": {
     "esbuild": true
