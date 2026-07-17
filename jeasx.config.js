@@ -22,13 +22,4 @@ export default {
   FASTIFY_SEND_OPTIONS: () => ({
     maxAge: process.env.NODE_ENV === "development" ? 0 : "365d",
   }),
-
-  /** @type {() => import("@fastify/cookie").FastifyCookieOptions} */
-  // FASTIFY_COOKIE_OPTIONS: () => ({}),
-
-  /** @type {() => import("@fastify/formbody").FastifyFormbodyOptions} */
-  // FASTIFY_FORMBODY_OPTIONS: () => ({}),
-
-  /** @type {() => import("@fastify/multipart").FastifyMultipartOptions} */
-  // FASTIFY_MULTIPART_OPTIONS: () => ({}),
 };
