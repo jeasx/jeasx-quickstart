@@ -4,7 +4,7 @@ document.querySelectorAll("[data-js-clipboard]").forEach((el) => {
   if (el instanceof HTMLElement) {
     el.addEventListener("click", (e) => {
       e.preventDefault();
-      if (confirm(`${el.innerText}?`)) {
+      if (confirm(`${el.title}?`)) {
         navigator.clipboard.writeText(el.dataset.jsClipboard);
       }
     });

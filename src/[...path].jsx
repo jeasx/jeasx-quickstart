@@ -11,7 +11,6 @@ export default async function ({ request, reply }) {
   const response = await fetch(`https://dummyjson.com/recipes${id}`);
 
   if (!response.ok) {
-    reply.status(404);
     return;
   }
 
@@ -33,7 +32,7 @@ export default async function ({ request, reply }) {
           </div>
           <div class="col">
             <h2>Ingredients</h2>
-            <Clipboard list={ingredients} />
+            <Clipboard title="Copy ingredients to clipboard" list={ingredients} />
             <ul>
               {ingredients.map((ingredient) => (
                 <li>{ingredient}</li>
@@ -42,7 +41,7 @@ export default async function ({ request, reply }) {
           </div>
         </div>
         <h2>Instructions</h2>
-        <Clipboard list={instructions} />
+        <Clipboard title="Copy instructions to clipboard" list={instructions} />
         <ol>
           {instructions.map((instruction) => (
             <li>{instruction}</li>
