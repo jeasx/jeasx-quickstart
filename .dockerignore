@@ -4,7 +4,6 @@
 **
 !/public/
 !/src/
-!.env
 !jeasx.config.js
 !package-lock.json
 !package.json
