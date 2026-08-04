@@ -8,6 +8,8 @@ import querystring from "node:querystring";
 export default {
   /** @type {() => import("esbuild").BuildOptions} */
   ESBUILD_SERVER_OPTIONS: () => ({
+    // Create a timestamp at build time (e.g. for cache busting).
+    define: { "process.env.BUILD_ID": `"${Date.now().toString(36)}"` },
     // Load SVG files as strings (see `src/loader.d.ts`).
     loader: { ".svg": "text" },
     // Create sourcemaps for debugging only in development.
