@@ -10,7 +10,7 @@ cd my-app
 npm run dev
 ```
 
-If you omit `my-app`, the project will be cloned into a folder called `jeasx-quickstart`.
+If you omit `my-app`, the project is created in a folder named `jeasx-quickstart`.
 
 ## Options for bootstrapping a project
 
@@ -24,7 +24,7 @@ npm create jeasx@latest -- my-app --with-docker
 
 ### Vercel
 
-Bootstrap a new project with support for Vervel.
+Bootstrap a new project with support for Vercel.
 
 ```bash
 npm create jeasx@latest -- my-app --with-vercel

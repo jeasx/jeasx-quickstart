@@ -1,31 +1,67 @@
-/* This file is an example. Delete it at will. */
+/* This file is an example. Feel free to delete it. */
 
+import ErrorBoundary from "./components/ErrorBoundary";
 import Layout from "./components/Layout";
 
-// Cache data in memory to avoid unnecessary API calls
-const RECIPES = (await (await fetch("https://dummyjson.com/recipes")).json()).recipes;
-const CUISINES = [...new Set(RECIPES.map(({ cuisine }) => cuisine))].toSorted();
+// Cache data in memory to avoid unnecessary API calls.
+// Loaded on first request; a failed load is retried on the next request.
+let cache;
+
+async function loadRecipes() {
+  cache ??= fetch("https://dummyjson.com/recipes")
+    .then((response) => {
+      if (!response.ok) throw new Error(`Failed to load recipes: ${response.status}`);
+      return response.json();
+    })
+    .then(({ recipes }) => ({
+      recipes,
+      cuisines: [...new Set(recipes.map(({ cuisine }) => cuisine))].toSorted(),
+    }))
+    .catch((error) => {
+      cache = undefined;
+      throw error;
+    });
+  return cache;
+}
 
 /**
  * @param {import("./types").RouteProps} props
  */
-export default async function ({ request, reply }) {
-  const $cuisine = request.query["cuisine"] || "";
+export default function ({ request }) {
+  const query = request.query["cuisine"];
+  const $cuisine = typeof query === "string" ? query : "";
 
+  // The page is streamed: head and intro are sent right away,
+  // the recipes follow as soon as they are loaded.
   return (
     <Layout
       title={`${$cuisine} Recipes`.trim()}
       description={`Have fun cooking ${$cuisine.toLowerCase()} recipes`}
     >
       <h1>{$cuisine} Recipes</h1>
-      <p>Here you will find some exciting recipes to cook at home.</p>
+      <p>Discover delicious recipes to cook at home.</p>
+      <ErrorBoundary fallback={<p>Recipes could not be loaded. Please try again later.</p>}>
+        <Recipes cuisine={$cuisine} />
+      </ErrorBoundary>
+    </Layout>
+  );
+}
+
+/**
+ * @param {{cuisine: string}} props
+ */
+async function Recipes({ cuisine: $cuisine }) {
+  const { recipes, cuisines } = await loadRecipes();
+
+  return (
+    <>
       <div class="row wrap">
         <div class="col">
-          {CUISINES.map((cuisine) => (
+          {cuisines.map((cuisine) => (
             <>
               <a
-                href={cuisine !== $cuisine ? `?cuisine=${cuisine}` : ""}
-                class={{ active: cuisine === $cuisine }}
+                href={cuisine !== $cuisine ? `?cuisine=${encodeURIComponent(cuisine)}` : ""}
+                class={cuisine === $cuisine ? "active" : undefined}
               >
                 {cuisine}
               </a>{" "}
@@ -44,8 +80,9 @@ export default async function ({ request, reply }) {
           </tr>
         </thead>
         <tbody>
-          {RECIPES.filter(({ cuisine }) => !$cuisine || $cuisine === cuisine).map(
-            ({ id, name, cuisine, difficulty, image, prepTimeMinutes, cookTimeMinutes }) => (
+          {recipes
+            .filter(({ cuisine }) => !$cuisine || $cuisine === cuisine)
+            .map(({ id, name, cuisine, difficulty, image, prepTimeMinutes, cookTimeMinutes }) => (
               <tr>
                 <td>
                   <a href={`${id}-${slugify(name)}`}>{name}</a>
@@ -54,14 +91,13 @@ export default async function ({ request, reply }) {
                 <td>{difficulty}</td>
                 <td>{prepTimeMinutes + cookTimeMinutes} min</td>
                 <td>
-                  <img src={image} height="50" width="50" loading="lazy" />
+                  <img src={image} alt="" height="50" width="50" loading="lazy" />
                 </td>
               </tr>
-            ),
-          )}
+            ))}
         </tbody>
       </table>
-    </Layout>
+    </>
   );
 }
 

@@ -12,6 +12,20 @@
   navigation: auto;
 }
 
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 200ms;
+  animation-timing-function: ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
 table {
   width: 100%;
 }
@@ -95,6 +109,19 @@ a[href^="#"] {
 a:hover {
   border-color: #088;
   color: #088;
+}
+
+/* clipboard feedback (see src/browser/index.js) */
+button[data-js-clipboard] {
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+button[data-js-clipboard].copied {
+  background-color: #dfd;
+  box-shadow: 0 0 0 2px #2a2;
+}
+button[data-js-clipboard].failed {
+  background-color: #fdd;
+  box-shadow: 0 0 0 2px #c22;
 }
 
 /* common */

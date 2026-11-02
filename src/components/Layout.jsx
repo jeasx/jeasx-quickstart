@@ -1,4 +1,6 @@
-/* This file is an example. Delete it at will. */
+/* This file is an example. Feel free to delete it. */
+
+import { html } from "jsx-async-runtime";
 
 /**
  * @this {import("../types").ThisContext}
@@ -8,15 +10,15 @@ export default function Layout({ title = "", description = "", children = undefi
 
   return (
     <>
-      {{ html: "<!DOCTYPE html>" }}
+      {html("<!DOCTYPE html>")}
       <html lang="en">
         <head>
           <base href={path.endsWith("/") ? path : `${path}/`} />
           <meta charset="utf-8" />
           <meta name="description" content={description} />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
-          <link rel="stylesheet" href={`/index.css?${process.env.BUILD_ID}`} />
-          <script type="module" src={`/index.js?${process.env.BUILD_ID}`} />
+          <link rel="stylesheet" href={`/index.css?v=${process.env.BUILD_ID}`} />
+          <script type="module" src={`/index.js?v=${process.env.BUILD_ID}`} />
           <title>{title} | Jeasx - JSX with ease</title>
         </head>
         <body>
@@ -25,7 +27,7 @@ export default function Layout({ title = "", description = "", children = undefi
             <hr />
             <h5>Jeasx - Quickstart</h5>
             <p>
-              Explore this sample application to quickly get started with Jeasx. Visit the{" "}
+              Explore this sample app to get started with Jeasx quickly. Visit the{" "}
               <a href="https://www.jeasx.dev">Jeasx website</a> to learn more about the framework.
             </p>
           </footer>

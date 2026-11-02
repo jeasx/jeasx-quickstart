@@ -18,7 +18,7 @@ export default {
 
   /** @type {() => import("esbuild").BuildOptions} */
   ESBUILD_BROWSER_OPTIONS: () => ({
-    // Hash filenames based on their content (see `src/browser/index.css`).
+    // Emit fonts as files with content-hashed names (see `src/browser/index.css`).
     loader: { ".woff2": "file" },
     // Target environment for the generated JavaScript / CSS code.
     target: ["chrome130", "edge130", "firefox130", "safari18"],
@@ -35,7 +35,7 @@ export default {
 
   /** @type {() => import("fastify").FastifyServerOptions} */
   FASTIFY_SERVER_OPTIONS: () => ({
-    // Skip request logging in development.
+    // Log only errors in development to keep the console quiet.
     logger: { level: process.env.NODE_ENV === "development" ? "error" : "info" },
   }),
 

@@ -1,5 +1,6 @@
-/* This file is an example. Delete it at will. */
+/* This file is an example. Feel free to delete it. */
 
+import { html } from "jsx-async-runtime";
 import Clipboard from "./Clipboard.svg";
 
 /**
@@ -8,7 +9,7 @@ import Clipboard from "./Clipboard.svg";
 export default function ({ title, list }) {
   return (
     <button type="button" data-js-clipboard={list.join("\n")} title={title}>
-      {{ html: Clipboard }}
+      {html(Clipboard)}
     </button>
   );
 }

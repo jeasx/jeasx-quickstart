@@ -1,23 +1,29 @@
-/* This file is an example. Delete it at will. */
+/* This file is an example. Feel free to delete it. */
 
 import Clipboard from "./components/Clipboard";
 import Layout from "./components/Layout";
 
+const RECIPE_PATH = new URLPattern({ pathname: "/:id(\\d+){-*}?" });
+
 /**
  * @param {import("./types").RouteProps} props
  */
-export default async function ({ request, reply }) {
-  const [id] = request.path.split("-", 1);
-  const response = await fetch(`https://dummyjson.com/recipes${id}`);
+export default async function ({ request }) {
+  // Only accept paths like "/12" or "/12-some-slug".
+  const id = RECIPE_PATH.exec({ pathname: request.path })?.pathname.groups.id;
+  if (!id) {
+    return;
+  }
 
-  if (!response.ok) {
+  const response = await fetch(`https://dummyjson.com/recipes/${id}`).catch(() => null);
+  if (!response?.ok) {
     return;
   }
 
   const { name, ingredients, instructions, image, difficulty, cuisine } = await response.json();
 
   return (
-    <Layout title={name} description={`${name} - ${cuisine} - ${difficulty} `}>
+    <Layout title={name} description={`${name} - ${cuisine} - ${difficulty}`}>
       <a href="/" data-js-back>
         &laquo; Back
       </a>

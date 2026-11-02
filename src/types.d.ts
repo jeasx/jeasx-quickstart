@@ -1,4 +1,4 @@
-/* This file is an example. Delete it at will. */
+/* This file is an example. Feel free to delete it. */
 
 import { FastifyReply } from "fastify/types/reply";
 import { FastifyRequest } from "fastify/types/request";

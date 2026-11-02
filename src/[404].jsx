@@ -1,4 +1,4 @@
-/* This file is an example. Delete it at will. */
+/* This file is an example. Feel free to delete it. */
 
 import Layout from "./components/Layout";
 
@@ -8,15 +8,14 @@ import Layout from "./components/Layout";
 export default function ({ request }) {
   return (
     <Layout
-      title="404 - Resource Not Found"
-      description="The resource you requested has not been found at the specified
-    address."
+      title="404 - Page Not Found"
+      description="The page you requested could not be found."
     >
-      <main>
-        <h1>404 - Resource Not Found</h1>
-        <p>The requested resource &raquo;{request.path}&laquo; has not been found.</p>
+      <>
+        <h1>404 - Page Not Found</h1>
+        <p>The page &raquo;{request.path}&laquo; could not be found.</p>
         <a href="/">Go to homepage</a>
-      </main>
+      </>
     </Layout>
   );
 }
