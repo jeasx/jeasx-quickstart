@@ -1,6 +1,9 @@
 # This file is an example. Feel free to delete it.
 FROM node:lts-alpine
 
+# Libraries like React check NODE_ENV at runtime and otherwise load their slower development builds.
+ENV NODE_ENV=production
+
 USER node
 WORKDIR /home/node
 
