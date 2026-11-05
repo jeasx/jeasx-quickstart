@@ -8,19 +8,18 @@ import Layout from "./components/Layout";
 let cache;
 
 async function loadRecipes() {
-  cache ??= fetch("https://dummyjson.com/recipes")
-    .then((response) => {
-      if (!response.ok) throw new Error(`Failed to load recipes: ${response.status}`);
-      return response.json();
-    })
-    .then(({ recipes }) => ({
-      recipes,
-      cuisines: [...new Set(recipes.map(({ cuisine }) => cuisine))].toSorted(),
-    }))
-    .catch((error) => {
-      cache = undefined;
-      throw error;
-    });
+  if (cache) {
+    return cache;
+  }
+  const response = await fetch("https://dummyjson.com/recipes");
+  if (!response.ok) {
+    throw new Error(`Failed to load recipes: ${response.status}`);
+  }
+  const { recipes } = await response.json();
+  cache = {
+    recipes,
+    cuisines: [...new Set(recipes.map(({ cuisine }) => cuisine))].toSorted(),
+  };
   return cache;
 }
 
@@ -44,9 +43,14 @@ export default function ({ request }) {
     >
       <h1>{$cuisine} Recipes</h1>
       <p>Discover delicious recipes to cook at home.</p>
-      <ErrorBoundary fallback={<p>Recipes could not be loaded. Please try again later.</p>}>
+      {cache ? (
+        // Data is cached, so nothing can fail: stream directly.
         <Recipes cuisines={$cuisines} />
-      </ErrorBoundary>
+      ) : (
+        <ErrorBoundary fallback={<p>Recipes could not be loaded. Please try again later.</p>}>
+          <Recipes cuisines={$cuisines} />
+        </ErrorBoundary>
+      )}
     </Layout>
   );
 }
@@ -84,34 +88,43 @@ async function Recipes({ cuisines: $cuisines }) {
         </div>
       </div>
       <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Image</th>
-            <th>Name</th>
-            <th>Cuisine</th>
-            <th>Difficulty</th>
-            <th>Minutes</th>
-          </tr>
-        </thead>
-        <tbody>
-          {recipes
-            .filter(({ cuisine }) => !$cuisines.length || $cuisines.includes(cuisine))
-            .map(({ id, name, cuisine, difficulty, image, prepTimeMinutes, cookTimeMinutes }) => (
-              <tr>
-                <td>
-                  <img src={image} alt="" style={`view-transition-name: recipe-${id}`} height="50" width="50" loading="lazy" />
-                </td>
-                <td>
-                  <a href={`${id}-${slugify(name)}`} style={`view-transition-name: title-${id}`}>{name}</a>
-                </td>
-                <td>{cuisine}</td>
-                <td>{difficulty}</td>
-                <td>{prepTimeMinutes + cookTimeMinutes} min</td>
-              </tr>
-            ))}
-        </tbody>
-      </table>
+        <table>
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Name</th>
+              <th>Cuisine</th>
+              <th>Difficulty</th>
+              <th>Minutes</th>
+            </tr>
+          </thead>
+          <tbody>
+            {recipes
+              .filter(({ cuisine }) => !$cuisines.length || $cuisines.includes(cuisine))
+              .map(({ id, name, cuisine, difficulty, image, prepTimeMinutes, cookTimeMinutes }) => (
+                <tr>
+                  <td>
+                    <img
+                      src={image}
+                      alt=""
+                      style={`view-transition-name: recipe-${id}`}
+                      height="50"
+                      width="50"
+                      loading="lazy"
+                    />
+                  </td>
+                  <td>
+                    <a href={`${id}-${slugify(name)}`} style={`view-transition-name: title-${id}`}>
+                      {name}
+                    </a>
+                  </td>
+                  <td>{cuisine}</td>
+                  <td>{difficulty}</td>
+                  <td>{prepTimeMinutes + cookTimeMinutes} min</td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
       </div>
     </>
   );
