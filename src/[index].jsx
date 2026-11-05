@@ -28,8 +28,12 @@ async function loadRecipes() {
  * @param {import("./types").RouteProps} props
  */
 export default function ({ request }) {
+  // Multiple cuisines can be selected: ?cuisine=Italian&cuisine=Thai
   const query = request.query["cuisine"];
-  const $cuisine = typeof query === "string" ? query : "";
+  const $cuisines = (Array.isArray(query) ? query : [query]).filter(
+    (value) => typeof value === "string" && value !== "",
+  );
+  const $cuisine = $cuisines.join(", ");
 
   // The page is streamed: head and intro are sent right away,
   // the recipes follow as soon as they are loaded.
@@ -41,17 +45,26 @@ export default function ({ request }) {
       <h1>{$cuisine} Recipes</h1>
       <p>Discover delicious recipes to cook at home.</p>
       <ErrorBoundary fallback={<p>Recipes could not be loaded. Please try again later.</p>}>
-        <Recipes cuisine={$cuisine} />
+        <Recipes cuisines={$cuisines} />
       </ErrorBoundary>
     </Layout>
   );
 }
 
 /**
- * @param {{cuisine: string}} props
+ * @param {{cuisines: string[]}} props
  */
-async function Recipes({ cuisine: $cuisine }) {
+async function Recipes({ cuisines: $cuisines }) {
   const { recipes, cuisines } = await loadRecipes();
+
+  // Link that toggles the given cuisine in the current selection.
+  const toggleHref = (/** @type {string} */ cuisine) => {
+    const selection = $cuisines.includes(cuisine)
+      ? $cuisines.filter((selected) => selected !== cuisine)
+      : [...$cuisines, cuisine];
+    const params = new URLSearchParams(selection.map((selected) => ["cuisine", selected]));
+    return params.size ? `?${params}` : "?";
+  };
 
   return (
     <>
@@ -60,9 +73,9 @@ async function Recipes({ cuisine: $cuisine }) {
           {cuisines.map((cuisine) => (
             <>
               <a
-                href={cuisine !== $cuisine ? `?cuisine=${encodeURIComponent(cuisine)}` : ""}
-                class={cuisine === $cuisine ? "active" : undefined}
-                title={cuisine === $cuisine ? "Remove filter" : undefined}
+                href={toggleHref(cuisine)}
+                class={$cuisines.includes(cuisine) ? "active" : undefined}
+                title={$cuisines.includes(cuisine) ? "Remove filter" : undefined}
               >
                 {cuisine}
               </a>{" "}
@@ -82,7 +95,7 @@ async function Recipes({ cuisine: $cuisine }) {
         </thead>
         <tbody>
           {recipes
-            .filter(({ cuisine }) => !$cuisine || $cuisine === cuisine)
+            .filter(({ cuisine }) => !$cuisines.length || $cuisines.includes(cuisine))
             .map(({ id, name, cuisine, difficulty, image, prepTimeMinutes, cookTimeMinutes }) => (
               <tr>
                 <td>
