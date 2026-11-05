@@ -20,7 +20,7 @@ export default async function ({ request }) {
     return;
   }
 
-  const { name, ingredients, instructions, image, difficulty, cuisine } = await response.json();
+  const { name, ingredients, instructions, image, difficulty, cuisine, prepTimeMinutes, cookTimeMinutes } = await response.json();
 
   return (
     <Layout title={name} description={`${name} - ${cuisine} - ${difficulty}`}>
@@ -30,7 +30,7 @@ export default async function ({ request }) {
       <article>
         <h1 style={`view-transition-name: title-${id}`}>{name}</h1>
         <p>
-          {cuisine} / {difficulty}
+          {cuisine} / {difficulty} / {prepTimeMinutes + cookTimeMinutes} min
         </p>
         <div class="row">
           <div class="col">
