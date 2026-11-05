@@ -55,15 +55,13 @@ async function Recipes({ selectedCuisines }) {
       <div class="row wrap">
         <div class="col">
           {cuisines.map((cuisine) => (
-            <>
-              <a
-                href={toggleHref(cuisine)}
-                class={selectedCuisines.includes(cuisine) ? "active" : undefined}
-                title={selectedCuisines.includes(cuisine) ? "Remove filter" : undefined}
-              >
-                {cuisine}
-              </a>{" "}
-            </>
+            <a
+              href={toggleHref(cuisine)}
+              class={selectedCuisines.includes(cuisine) ? "active" : undefined}
+              title={selectedCuisines.includes(cuisine) ? "Remove filter" : undefined}
+            >
+              {cuisine}
+            </a>
           ))}
         </div>
       </div>
