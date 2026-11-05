@@ -28,17 +28,18 @@ export default async function ({ request }) {
         &laquo; Back
       </a>
       <article>
-        <h1>{name}</h1>
+        <h1 style={`view-transition-name: title-${id}`}>{name}</h1>
         <p>
           {cuisine} / {difficulty}
         </p>
         <div class="row">
           <div class="col">
-            <img src={image} alt={name} width="400" />
+            <img src={image} alt={name} width="400" style={`view-transition-name: recipe-${id}`} />
           </div>
           <div class="col">
-            <h2>Ingredients</h2>
-            <Clipboard title="Copy ingredients to clipboard" list={ingredients} />
+            <h2>
+              Ingredients <Clipboard title="Copy ingredients to clipboard" list={ingredients} />
+            </h2>
             <ul>
               {ingredients.map((ingredient) => (
                 <li>{ingredient}</li>
@@ -46,8 +47,9 @@ export default async function ({ request }) {
             </ul>
           </div>
         </div>
-        <h2>Instructions</h2>
-        <Clipboard title="Copy instructions to clipboard" list={instructions} />
+        <h2>
+          Instructions <Clipboard title="Copy instructions to clipboard" list={instructions} />
+        </h2>
         <ol>
           {instructions.map((instruction) => (
             <li>{instruction}</li>

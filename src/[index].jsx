@@ -62,6 +62,7 @@ async function Recipes({ cuisine: $cuisine }) {
               <a
                 href={cuisine !== $cuisine ? `?cuisine=${encodeURIComponent(cuisine)}` : ""}
                 class={cuisine === $cuisine ? "active" : undefined}
+                title={cuisine === $cuisine ? "Remove filter" : undefined}
               >
                 {cuisine}
               </a>{" "}
@@ -85,13 +86,13 @@ async function Recipes({ cuisine: $cuisine }) {
             .map(({ id, name, cuisine, difficulty, image, prepTimeMinutes, cookTimeMinutes }) => (
               <tr>
                 <td>
-                  <a href={`${id}-${slugify(name)}`}>{name}</a>
+                  <a href={`${id}-${slugify(name)}`} style={`view-transition-name: title-${id}`}>{name}</a>
                 </td>
                 <td>{cuisine}</td>
                 <td>{difficulty}</td>
                 <td>{prepTimeMinutes + cookTimeMinutes} min</td>
                 <td>
-                  <img src={image} alt="" height="50" width="50" loading="lazy" />
+                  <img src={image} alt="" style={`view-transition-name: recipe-${id}`} height="50" width="50" loading="lazy" />
                 </td>
               </tr>
             ))}
