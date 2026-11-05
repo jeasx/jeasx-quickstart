@@ -3,52 +3,32 @@
 import ErrorBoundary from "./components/ErrorBoundary";
 import Layout from "./components/Layout";
 
-// Cache data in memory to avoid unnecessary API calls.
-// Loaded on first request; a failed load is retried on the next request.
-let cache;
-
-async function loadRecipes() {
-  if (cache) {
-    return cache;
-  }
-  const response = await fetch("https://dummyjson.com/recipes");
-  if (!response.ok) {
-    throw new Error(`Failed to load recipes: ${response.status}`);
-  }
-  const { recipes } = await response.json();
-  cache = {
-    recipes,
-    cuisines: [...new Set(recipes.map(({ cuisine }) => cuisine))].toSorted(),
-  };
-  return cache;
-}
-
 /**
  * @param {import("./types").RouteProps} props
  */
 export default function ({ request }) {
   // Multiple cuisines can be selected: ?cuisine=Italian&cuisine=Thai
-  const query = request.query["cuisine"];
-  const $cuisines = (Array.isArray(query) ? query : [query]).filter(
+  const cuisineParam = request.query["cuisine"];
+  const selectedCuisines = (Array.isArray(cuisineParam) ? cuisineParam : [cuisineParam]).filter(
     (value) => typeof value === "string" && value !== "",
   );
-  const $cuisine = $cuisines.join(", ");
+  const cuisineLabel = selectedCuisines.join(", ");
 
   // The page is streamed: head and intro are sent right away,
   // the recipes follow as soon as they are loaded.
   return (
     <Layout
-      title={`${$cuisine} Recipes`.trim()}
-      description={`Have fun cooking ${$cuisine.toLowerCase()} recipes`}
+      title={`${cuisineLabel} Recipes`.trim()}
+      description={`Have fun cooking ${cuisineLabel.toLowerCase()} recipes`}
     >
-      <h1>{$cuisine} Recipes</h1>
+      <h1>{cuisineLabel} Recipes</h1>
       <p>Discover delicious recipes to cook at home.</p>
-      {cache ? (
+      {globalThis.$recipeCache ? (
         // Data is cached, so nothing can fail: stream directly.
-        <Recipes cuisines={$cuisines} />
+        <Recipes selectedCuisines={selectedCuisines} />
       ) : (
         <ErrorBoundary fallback={<p>Recipes could not be loaded. Please try again later.</p>}>
-          <Recipes cuisines={$cuisines} />
+          <Recipes selectedCuisines={selectedCuisines} />
         </ErrorBoundary>
       )}
     </Layout>
@@ -56,17 +36,17 @@ export default function ({ request }) {
 }
 
 /**
- * @param {{cuisines: string[]}} props
+ * @param {{selectedCuisines: string[]}} props
  */
-async function Recipes({ cuisines: $cuisines }) {
+async function Recipes({ selectedCuisines }) {
   const { recipes, cuisines } = await loadRecipes();
 
   // Link that toggles the given cuisine in the current selection.
   const toggleHref = (/** @type {string} */ cuisine) => {
-    const selection = $cuisines.includes(cuisine)
-      ? $cuisines.filter((selected) => selected !== cuisine)
-      : [...$cuisines, cuisine];
-    const params = new URLSearchParams(selection.map((selected) => ["cuisine", selected]));
+    const nextSelection = selectedCuisines.includes(cuisine)
+      ? selectedCuisines.filter((selected) => selected !== cuisine)
+      : [...selectedCuisines, cuisine];
+    const params = new URLSearchParams(nextSelection.map((selected) => ["cuisine", selected]));
     return params.size ? `?${params}` : "?";
   };
 
@@ -78,8 +58,8 @@ async function Recipes({ cuisines: $cuisines }) {
             <>
               <a
                 href={toggleHref(cuisine)}
-                class={$cuisines.includes(cuisine) ? "active" : undefined}
-                title={$cuisines.includes(cuisine) ? "Remove filter" : undefined}
+                class={selectedCuisines.includes(cuisine) ? "active" : undefined}
+                title={selectedCuisines.includes(cuisine) ? "Remove filter" : undefined}
               >
                 {cuisine}
               </a>{" "}
@@ -100,7 +80,9 @@ async function Recipes({ cuisines: $cuisines }) {
           </thead>
           <tbody>
             {recipes
-              .filter(({ cuisine }) => !$cuisines.length || $cuisines.includes(cuisine))
+              .filter(
+                ({ cuisine }) => !selectedCuisines.length || selectedCuisines.includes(cuisine),
+              )
               .map(({ id, name, cuisine, difficulty, image, prepTimeMinutes, cookTimeMinutes }) => (
                 <tr>
                   <td>
@@ -130,11 +112,28 @@ async function Recipes({ cuisines: $cuisines }) {
   );
 }
 
+// Cache data in memory to avoid unnecessary API calls.
+// Loaded on first request; a failed load is retried on the next request.
+async function loadRecipes() {
+  if (globalThis.$recipeCache) {
+    return globalThis.$recipeCache;
+  }
+  const response = await fetch("https://dummyjson.com/recipes");
+  if (!response.ok) {
+    throw new Error(`Failed to load recipes: ${response.status}`);
+  }
+  const { recipes } = await response.json();
+  return (globalThis.$recipeCache = {
+    recipes,
+    cuisines: [...new Set(recipes.map(({ cuisine }) => cuisine))].toSorted(),
+  });
+}
+
 /**
- * @param {string} str
+ * @param {string} text
  */
-function slugify(str) {
-  return str
+function slugify(text) {
+  return text
     .toLowerCase()
     .replace(/[\s\W-]+/g, "-")
     .replace(/^-+|-+$/g, "");
