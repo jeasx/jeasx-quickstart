@@ -20,6 +20,7 @@ export default function ({ request }) {
     <Layout
       title={`${cuisineLabel} Recipes`.trim()}
       description={`Have fun cooking ${cuisineLabel.toLowerCase()} recipes`}
+      robots={selectedCuisines.length > 1 ? "noindex, follow" : undefined}
     >
       <h1>{cuisineLabel} Recipes</h1>
       <p>Discover delicious recipes to cook at home.</p>
@@ -50,6 +51,10 @@ async function Recipes({ selectedCuisines }) {
     return params.size ? `?${params}` : "?";
   };
 
+  // Number of cuisines selected after toggling the given cuisine.
+  const nextSelectionSize = (/** @type {string} */ cuisine) =>
+    selectedCuisines.length + (selectedCuisines.includes(cuisine) ? -1 : 1);
+
   return (
     <>
       <div class="row wrap">
@@ -57,6 +62,7 @@ async function Recipes({ selectedCuisines }) {
           {cuisines.map((cuisine) => (
             <a
               href={toggleHref(cuisine)}
+              rel={nextSelectionSize(cuisine) > 1 ? "nofollow" : undefined}
               class={selectedCuisines.includes(cuisine) ? "active" : undefined}
               title={selectedCuisines.includes(cuisine) ? "Remove filter" : undefined}
             >

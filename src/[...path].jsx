@@ -20,7 +20,16 @@ export default async function ({ request }) {
     return;
   }
 
-  const { name, ingredients, instructions, image, difficulty, cuisine, prepTimeMinutes, cookTimeMinutes } = await response.json();
+  const {
+    name,
+    ingredients,
+    instructions,
+    image,
+    difficulty,
+    cuisine,
+    prepTimeMinutes,
+    cookTimeMinutes,
+  } = await response.json();
 
   return (
     <Layout title={name} description={`${name} - ${cuisine} - ${difficulty}`}>

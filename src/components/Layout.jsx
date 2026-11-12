@@ -5,7 +5,12 @@ import { html } from "jsx-async-runtime";
 /**
  * @this {import("../types").ThisContext}
  */
-export default function Layout({ title = "", description = "", children = undefined }) {
+export default function Layout({
+  title = "",
+  description = "",
+  robots = undefined,
+  children = undefined,
+}) {
   const path = this.request.path;
 
   return (
@@ -16,6 +21,7 @@ export default function Layout({ title = "", description = "", children = undefi
           <base href={path.endsWith("/") ? path : `${path}/`} />
           <meta charset="utf-8" />
           <meta name="description" content={description} />
+          {robots && <meta name="robots" content={robots} />}
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <link rel="stylesheet" href={`/index.css?v=${process.env.BUILD_ID}`} />
           <script type="module" src={`/index.js?v=${process.env.BUILD_ID}`} />
