@@ -39,14 +39,6 @@ export default function ({ request }) {
   );
 }
 
-const DIFFICULTY_ORDER = ["Easy", "Medium", "Hard"];
-
-// Unknown difficulties sort last (the numeric collator ignores a minus sign).
-const difficultyRank = (/** @type {string} */ difficulty) => {
-  const rank = DIFFICULTY_ORDER.indexOf(difficulty);
-  return rank === -1 ? DIFFICULTY_ORDER.length : rank;
-};
-
 /**
  * @param {{selectedCuisines: string[]}} props
  */
@@ -115,7 +107,9 @@ async function Recipes({ selectedCuisines }) {
                     </a>
                   </td>
                   <td>{cuisine}</td>
-                  <td data-sort-value={difficultyRank(difficulty)}>{difficulty}</td>
+                  <td data-sort-value={["Easy", "Medium", "Hard"].indexOf(difficulty)}>
+                    {difficulty}
+                  </td>
                   <td data-sort-value={prepTimeMinutes + cookTimeMinutes}>
                     {prepTimeMinutes + cookTimeMinutes} min
                   </td>

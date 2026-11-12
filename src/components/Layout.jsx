@@ -16,7 +16,7 @@ export default function Layout({ title = "", description = "", children = undefi
         <head>
           <meta charset="utf-8" />
           <meta name="description" content={description} />
-          {hasQuery && <meta name="robots" content={"noindex, follow"} />}
+          {hasQuery && <meta name="robots" content="noindex, follow" />}
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <link rel="stylesheet" href={`/index.css?v=${process.env.BUILD_ID}`} />
           <script type="module" src={`/index.js?v=${process.env.BUILD_ID}`} />
