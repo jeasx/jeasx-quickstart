@@ -7,7 +7,7 @@ import { html, jsxToString } from "jsx-async-runtime";
  * shows the fallback instead of cutting off the streamed page.
  *
  * @this {import("../types").ThisContext}
- * @param {{fallback: JSX.Element, children: JSX.Element}} props
+ * @param {{fallback: JSX.Element, children?: JSX.Element}} props
  */
 export default async function ErrorBoundary({ fallback, children }) {
   try {

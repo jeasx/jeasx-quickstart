@@ -22,7 +22,18 @@ export default async function ({ request, reply }) {
     return null;
   });
 
-  const recipe = data?.recipes.find((recipe) => recipe.id === Number(id));
+  if (!data) {
+    reply.status(503).header("Retry-After", "60");
+    return (
+      <Layout title="Service Unavailable" description="Recipes could not be loaded.">
+        <h1>Service Unavailable</h1>
+        <p>Recipes could not be loaded. Please try again later.</p>
+        <a href="/">Go to homepage</a>
+      </Layout>
+    );
+  }
+
+  const recipe = data.recipes.find((recipe) => recipe.id === Number(id));
   if (!recipe) {
     return;
   }
@@ -41,8 +52,7 @@ export default async function ({ request, reply }) {
   // Redirect "/12" or "/12-wrong-slug" to the canonical URL.
   const canonicalPath = `/${id}-${slugify(name)}`;
   if (request.path !== canonicalPath) {
-    const query = request.url.includes("?") ? request.url.slice(request.url.indexOf("?")) : "";
-    return reply.redirect(canonicalPath + query, 301);
+    return reply.redirect(canonicalPath, 301);
   }
 
   return (

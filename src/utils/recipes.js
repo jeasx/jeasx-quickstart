@@ -1,24 +1,20 @@
 /* This file is an example. Feel free to delete it. */
 
-/**
- * @typedef {{id: number, name: string, cuisine: string, difficulty: string, image: string,
- *   ingredients: string[], instructions: string[], prepTimeMinutes: number, cookTimeMinutes: number}} Recipe
- * @typedef {{recipes: Recipe[], cuisines: string[]}} RecipeData
- */
+// Stored on globalThis (not in module variables),
+// because every route is bundled separately
+// and gets its own copy of this module.
 
 /**
  * True once the recipes are loaded, so rendering them can't fail anymore.
  */
 export function recipesLoaded() {
-  return Boolean(globalThis.$recipes);
+  return globalThis.$recipes !== undefined;
 }
 
 /**
  * Cache data in memory to avoid unnecessary API calls.
  * Loaded on first request; concurrent requests share the pending load,
  * a failed load is retried on the next request.
- *
- * @returns {Promise<RecipeData>}
  */
 export function loadRecipes() {
   if (globalThis.$recipes) {

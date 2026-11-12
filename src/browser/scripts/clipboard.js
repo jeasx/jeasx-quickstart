@@ -2,7 +2,7 @@
 
 document.querySelectorAll("[data-js-clipboard]").forEach((el) => {
   if (el instanceof HTMLElement) {
-    el.addEventListener("click", (e) => {
+    el.addEventListener("click", () => {
       el.dataset.jsTitle ??= el.title;
       const title = el.dataset.jsTitle;
       const show = (state, text) => {

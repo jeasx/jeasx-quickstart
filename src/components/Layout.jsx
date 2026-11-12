@@ -6,7 +6,6 @@ import { html } from "jsx-async-runtime";
  * @this {import("../types").ThisContext}
  */
 export default function Layout({ title = "", description = "", children = undefined }) {
-  const path = this.request.path;
   // Pages with query parameters (filters, tracking, ...) should not be indexed.
   const hasQuery = Object.keys(this.request.query ?? {}).length > 0;
 
@@ -15,7 +14,6 @@ export default function Layout({ title = "", description = "", children = undefi
       {html("<!DOCTYPE html>")}
       <html lang="en">
         <head>
-          <base href={path.endsWith("/") ? path : `${path}/`} />
           <meta charset="utf-8" />
           <meta name="description" content={description} />
           {hasQuery && <meta name="robots" content={"noindex, follow"} />}

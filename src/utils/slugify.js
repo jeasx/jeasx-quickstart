@@ -5,7 +5,9 @@
  */
 export default function slugify(text) {
   return text
+    .normalize("NFKD")
+    .replace(/\p{M}/gu, "")
     .toLowerCase()
-    .replace(/[\s\W-]+/g, "-")
+    .replace(/\W+/g, "-")
     .replace(/^-+|-+$/g, "");
 }

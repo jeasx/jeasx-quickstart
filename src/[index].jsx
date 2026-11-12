@@ -21,7 +21,9 @@ export default function ({ request }) {
   return (
     <Layout
       title={`${cuisineLabel} Recipes`.trim()}
-      description={["Have fun cooking", cuisineLabel.toLowerCase(), "recipes"].filter(Boolean).join(" ")}
+      description={["Have fun cooking", cuisineLabel.toLowerCase(), "recipes"]
+        .filter(Boolean)
+        .join(" ")}
     >
       <h1>{cuisineLabel} Recipes</h1>
       <p>Discover delicious recipes to cook at home.</p>
@@ -39,6 +41,12 @@ export default function ({ request }) {
 
 const DIFFICULTY_ORDER = ["Easy", "Medium", "Hard"];
 
+// Unknown difficulties sort last (the numeric collator ignores a minus sign).
+const difficultyRank = (/** @type {string} */ difficulty) => {
+  const rank = DIFFICULTY_ORDER.indexOf(difficulty);
+  return rank === -1 ? DIFFICULTY_ORDER.length : rank;
+};
+
 /**
  * @param {{selectedCuisines: string[]}} props
  */
@@ -51,8 +59,12 @@ async function Recipes({ selectedCuisines }) {
       ? selectedCuisines.filter((selected) => selected !== cuisine)
       : [...selectedCuisines, cuisine];
     const params = new URLSearchParams(nextSelection.map((selected) => ["cuisine", selected]));
-    return params.size ? `?${params}` : "?";
+    return params.size ? `/?${params}` : "/";
   };
+
+  const filteredRecipes = recipes.filter(
+    ({ cuisine }) => !selectedCuisines.length || selectedCuisines.includes(cuisine),
+  );
 
   return (
     <>
@@ -71,7 +83,8 @@ async function Recipes({ selectedCuisines }) {
           ))}
         </div>
       </div>
-      <div class="table-wrap">
+      {!filteredRecipes.length && <p>No recipes match the selected cuisines.</p>}
+      <div class="table-wrap" hidden={!filteredRecipes.length}>
         <table data-js-sort>
           <thead>
             <tr>
@@ -83,11 +96,8 @@ async function Recipes({ selectedCuisines }) {
             </tr>
           </thead>
           <tbody>
-            {recipes
-              .filter(
-                ({ cuisine }) => !selectedCuisines.length || selectedCuisines.includes(cuisine),
-              )
-              .map(({ id, name, cuisine, difficulty, image, prepTimeMinutes, cookTimeMinutes }) => (
+            {filteredRecipes.map(
+              ({ id, name, cuisine, difficulty, image, prepTimeMinutes, cookTimeMinutes }) => (
                 <tr>
                   <td>
                     <img
@@ -100,17 +110,18 @@ async function Recipes({ selectedCuisines }) {
                     />
                   </td>
                   <td>
-                    <a href={`${id}-${slugify(name)}`} style={`view-transition-name: title-${id}`}>
+                    <a href={`/${id}-${slugify(name)}`} style={`view-transition-name: title-${id}`}>
                       {name}
                     </a>
                   </td>
                   <td>{cuisine}</td>
-                  <td data-sort-value={DIFFICULTY_ORDER.indexOf(difficulty)}>{difficulty}</td>
+                  <td data-sort-value={difficultyRank(difficulty)}>{difficulty}</td>
                   <td data-sort-value={prepTimeMinutes + cookTimeMinutes}>
                     {prepTimeMinutes + cookTimeMinutes} min
                   </td>
                 </tr>
-              ))}
+              ),
+            )}
           </tbody>
         </table>
       </div>
