@@ -78,3 +78,34 @@ td:first-child {
     display: none;
   }
 }
+
+/* sortable headers (see src/browser/scripts/sort.js) */
+th[data-js-sort] button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+}
+
+th[data-js-sort] button:hover {
+  color: var(--accent);
+  transform: none;
+}
+
+th[data-js-sort] button::after {
+  content: "↕";
+  opacity: 0.4;
+}
+
+th[aria-sort="ascending"] button::after {
+  content: "↑";
+  opacity: 1;
+}
+
+th[aria-sort="descending"] button::after {
+  content: "↓";
+  opacity: 1;
+}

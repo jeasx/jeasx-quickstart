@@ -2,3 +2,4 @@
 
 import "./scripts/back.js";
 import "./scripts/clipboard.js";
+import "./scripts/sort.js";

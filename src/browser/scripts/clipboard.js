@@ -3,7 +3,6 @@
 document.querySelectorAll("[data-js-clipboard]").forEach((el) => {
   if (el instanceof HTMLElement) {
     el.addEventListener("click", (e) => {
-      e.preventDefault();
       el.dataset.jsTitle ??= el.title;
       const title = el.dataset.jsTitle;
       const show = (state, text) => {
@@ -18,8 +17,9 @@ document.querySelectorAll("[data-js-clipboard]").forEach((el) => {
           }, 2000),
         );
       };
-      navigator.clipboard
-        .writeText(el.dataset.jsClipboard ?? "")
+      // navigator.clipboard is missing on insecure (http) origins.
+      Promise.resolve()
+        .then(() => navigator.clipboard.writeText(el.dataset.jsClipboard ?? ""))
         .then(() => show("copied", "Copied!"))
         .catch(() => show("failed", "Copying failed"));
     });

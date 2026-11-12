@@ -2,21 +2,28 @@
 
 import Clipboard from "./components/Clipboard";
 import Layout from "./components/Layout";
+import { loadRecipes } from "./utils/recipes";
+import slugify from "./utils/slugify";
 
 const RECIPE_PATH = new URLPattern({ pathname: "/:id(\\d+){-*}?" });
 
 /**
  * @param {import("./types").RouteProps} props
  */
-export default async function ({ request }) {
+export default async function ({ request, reply }) {
   // Only accept paths like "/12" or "/12-some-slug".
   const id = RECIPE_PATH.exec({ pathname: request.path })?.pathname.groups.id;
   if (!id) {
     return;
   }
 
-  const response = await fetch(`https://dummyjson.com/recipes/${id}`).catch(() => null);
-  if (!response?.ok) {
+  const data = await loadRecipes().catch((error) => {
+    request.log.error(error);
+    return null;
+  });
+
+  const recipe = data?.recipes.find((recipe) => recipe.id === Number(id));
+  if (!recipe) {
     return;
   }
 
@@ -29,7 +36,14 @@ export default async function ({ request }) {
     cuisine,
     prepTimeMinutes,
     cookTimeMinutes,
-  } = await response.json();
+  } = recipe;
+
+  // Redirect "/12" or "/12-wrong-slug" to the canonical URL.
+  const canonicalPath = `/${id}-${slugify(name)}`;
+  if (request.path !== canonicalPath) {
+    const query = request.url.includes("?") ? request.url.slice(request.url.indexOf("?")) : "";
+    return reply.redirect(canonicalPath + query, 301);
+  }
 
   return (
     <Layout title={name} description={`${name} - ${cuisine} - ${difficulty}`}>
@@ -43,7 +57,13 @@ export default async function ({ request }) {
         </p>
         <div class="row">
           <div class="col">
-            <img src={image} alt={name} width="400" style={`view-transition-name: recipe-${id}`} />
+            <img
+              src={image}
+              alt={name}
+              width="400"
+              height="400"
+              style={`view-transition-name: recipe-${id}`}
+            />
           </div>
           <div class="col">
             <h2>

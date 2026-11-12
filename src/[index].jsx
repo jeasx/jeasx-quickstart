@@ -2,6 +2,8 @@
 
 import ErrorBoundary from "./components/ErrorBoundary";
 import Layout from "./components/Layout";
+import { loadRecipes, recipesLoaded } from "./utils/recipes";
+import slugify from "./utils/slugify";
 
 /**
  * @param {import("./types").RouteProps} props
@@ -19,11 +21,11 @@ export default function ({ request }) {
   return (
     <Layout
       title={`${cuisineLabel} Recipes`.trim()}
-      description={`Have fun cooking ${cuisineLabel.toLowerCase()} recipes`}
+      description={["Have fun cooking", cuisineLabel.toLowerCase(), "recipes"].filter(Boolean).join(" ")}
     >
       <h1>{cuisineLabel} Recipes</h1>
       <p>Discover delicious recipes to cook at home.</p>
-      {globalThis.$recipeCache ? (
+      {recipesLoaded() ? (
         // Data is cached, so nothing can fail: stream directly.
         <Recipes selectedCuisines={selectedCuisines} />
       ) : (
@@ -34,6 +36,8 @@ export default function ({ request }) {
     </Layout>
   );
 }
+
+const DIFFICULTY_ORDER = ["Easy", "Medium", "Hard"];
 
 /**
  * @param {{selectedCuisines: string[]}} props
@@ -54,7 +58,8 @@ async function Recipes({ selectedCuisines }) {
     <>
       <div class="row wrap">
         <div class="col">
-          {cuisines.map((cuisine) => (
+          {/* Include unknown selected cuisines, so they can be removed again. */}
+          {[...new Set([...cuisines, ...selectedCuisines])].map((cuisine) => (
             <a
               href={toggleHref(cuisine)}
               rel="nofollow"
@@ -67,14 +72,14 @@ async function Recipes({ selectedCuisines }) {
         </div>
       </div>
       <div class="table-wrap">
-        <table>
+        <table data-js-sort>
           <thead>
             <tr>
               <th>Image</th>
-              <th>Name</th>
-              <th>Cuisine</th>
-              <th>Difficulty</th>
-              <th>Minutes</th>
+              <th data-js-sort>Name</th>
+              <th data-js-sort>Cuisine</th>
+              <th data-js-sort>Difficulty</th>
+              <th data-js-sort>Minutes</th>
             </tr>
           </thead>
           <tbody>
@@ -100,8 +105,10 @@ async function Recipes({ selectedCuisines }) {
                     </a>
                   </td>
                   <td>{cuisine}</td>
-                  <td>{difficulty}</td>
-                  <td>{prepTimeMinutes + cookTimeMinutes} min</td>
+                  <td data-sort-value={DIFFICULTY_ORDER.indexOf(difficulty)}>{difficulty}</td>
+                  <td data-sort-value={prepTimeMinutes + cookTimeMinutes}>
+                    {prepTimeMinutes + cookTimeMinutes} min
+                  </td>
                 </tr>
               ))}
           </tbody>
@@ -109,31 +116,4 @@ async function Recipes({ selectedCuisines }) {
       </div>
     </>
   );
-}
-
-// Cache data in memory to avoid unnecessary API calls.
-// Loaded on first request; a failed load is retried on the next request.
-async function loadRecipes() {
-  if (globalThis.$recipeCache) {
-    return globalThis.$recipeCache;
-  }
-  const response = await fetch("https://dummyjson.com/recipes");
-  if (!response.ok) {
-    throw new Error(`Failed to load recipes: ${response.status}`);
-  }
-  const { recipes } = await response.json();
-  return (globalThis.$recipeCache = {
-    recipes,
-    cuisines: [...new Set(recipes.map(({ cuisine }) => cuisine))].toSorted(),
-  });
-}
-
-/**
- * @param {string} text
- */
-function slugify(text) {
-  return text
-    .toLowerCase()
-    .replace(/[\s\W-]+/g, "-")
-    .replace(/^-+|-+$/g, "");
 }

@@ -3,8 +3,8 @@ import type { FastifyReply, FastifyRequest } from "fastify";
 import "jeasx/serverless";
 
 type RouteProps = {
-  request?: FastifyRequest;
-  reply?: FastifyReply;
+  request: FastifyRequest;
+  reply: FastifyReply;
 };
 
 type ThisContext = RouteProps & {
