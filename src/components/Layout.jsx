@@ -5,13 +5,10 @@ import { html } from "jsx-async-runtime";
 /**
  * @this {import("../types").ThisContext}
  */
-export default function Layout({
-  title = "",
-  description = "",
-  robots = undefined,
-  children = undefined,
-}) {
+export default function Layout({ title = "", description = "", children = undefined }) {
   const path = this.request.path;
+  // Pages with query parameters (filters, tracking, ...) should not be indexed.
+  const hasQuery = Object.keys(this.request.query ?? {}).length > 0;
 
   return (
     <>
@@ -21,7 +18,7 @@ export default function Layout({
           <base href={path.endsWith("/") ? path : `${path}/`} />
           <meta charset="utf-8" />
           <meta name="description" content={description} />
-          {robots && <meta name="robots" content={robots} />}
+          {hasQuery && <meta name="robots" content={"noindex, follow"} />}
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <link rel="stylesheet" href={`/index.css?v=${process.env.BUILD_ID}`} />
           <script type="module" src={`/index.js?v=${process.env.BUILD_ID}`} />
