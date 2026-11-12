@@ -1,0 +1,12 @@
+/* images */
+img,
+svg {
+  max-width: 100%;
+  height: auto;
+  vertical-align: middle;
+}
+
+article img {
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}

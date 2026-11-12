@@ -1,0 +1,57 @@
+/* cuisine filter pills */
+.row.wrap .col {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.row.wrap .col a {
+  padding: 0.3rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface-alt);
+  color: var(--text);
+  font-size: 0.88rem;
+  text-decoration: none;
+  transition: all 0.15s;
+}
+
+.row.wrap .col a:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.row.wrap .col a.active {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-text);
+}
+
+.row.wrap .col a.active {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding-right: 0.5rem;
+}
+
+.row.wrap .col a.active::after {
+  content: "×";
+  display: grid;
+  place-items: center;
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.25);
+  font-size: 0.95rem;
+  line-height: 1;
+  transition: background-color 0.15s;
+}
+
+.row.wrap .col a.active:hover {
+  filter: brightness(0.92);
+  color: var(--accent-text);
+}
+
+.row.wrap .col a.active:hover::after {
+  background: rgb(255 255 255 / 0.45);
+}

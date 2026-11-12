@@ -27,7 +27,6 @@ export default function Layout({ title = "", description = "", children = undefi
         <body>
           <main>{children}</main>
           <footer>
-            <hr />
             <h5>Jeasx - Quickstart</h5>
             <p>
               Explore this sample app to get started with Jeasx quickly. Visit the{" "}

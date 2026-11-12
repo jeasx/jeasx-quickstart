@@ -1,0 +1,15 @@
+/* lists */
+ul,
+ol {
+  padding-left: 1.4rem;
+}
+
+li {
+  margin-bottom: 0.5rem;
+  padding-left: 0.25rem;
+}
+
+li::marker {
+  color: var(--accent);
+  font-weight: 700;
+}

@@ -1,0 +1,64 @@
+/* buttons (clipboard, see src/browser/index.js) */
+button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  background: var(--surface);
+  color: var(--muted);
+  font: inherit;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+button:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-1px);
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+button svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+button[data-js-clipboard] svg > * {
+  transform-origin: center;
+  transition:
+    opacity 0.2s,
+    transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+button[data-js-clipboard] .icon-ok,
+button[data-js-clipboard] .icon-fail,
+button[data-js-clipboard].copied .icon-copy,
+button[data-js-clipboard].failed .icon-copy {
+  opacity: 0;
+  transform: scale(0.5);
+}
+
+button[data-js-clipboard].copied .icon-ok,
+button[data-js-clipboard].failed .icon-fail {
+  opacity: 1;
+  transform: scale(1);
+}
+
+button[data-js-clipboard].copied {
+  border-color: var(--ok);
+  background: var(--ok-soft);
+  color: var(--ok);
+}
+
+button[data-js-clipboard].failed {
+  border-color: var(--err);
+  background: var(--err-soft);
+  color: var(--err);
+}

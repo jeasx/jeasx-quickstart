@@ -1,0 +1,22 @@
+/* grid */
+.row {
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
+  margin: 1rem 0;
+}
+
+.row [class*="col"] {
+  flex: 1 1 100%;
+  min-width: 0;
+}
+
+.row [class*="col"] > h2:first-child {
+  margin-top: 0;
+}
+
+@media (max-width: 40em) {
+  .row {
+    flex-direction: column;
+  }
+}
