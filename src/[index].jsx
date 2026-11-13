@@ -17,15 +17,8 @@ export default async function ({ request }) {
   }
 
   const selectedCuisines = parseCuisines(request.query, recipeData.cuisines);
-  const filteredRecipes = selectedCuisines.length
-    ? recipeData.recipes.filter(({ cuisine }) => selectedCuisines.includes(cuisine))
-    : recipeData.recipes;
-
-  const label = selectedCuisines.join(", ");
-  const title = label ? `${label} Recipes` : "Recipes";
-  const description = label
-    ? `Have fun cooking ${label.toLowerCase()} recipes`
-    : "Have fun cooking recipes";
+  const filteredRecipes = filterByCuisines(recipeData.recipes, selectedCuisines);
+  const { title, description } = pageMeta(selectedCuisines);
 
   return (
     <Layout title={title} description={description}>
@@ -104,11 +97,32 @@ export default async function ({ request }) {
 function parseCuisines(query, known) {
   const param = /** @type {Record<string, unknown>} */ (query ?? {})["cuisine"];
   const values = Array.isArray(param) ? param : [param];
-  return [
-    ...new Set(
-      values.filter((value) => typeof value === "string" && known.includes(value)),
-    ),
-  ];
+  return [...new Set(values.filter((value) => typeof value === "string" && known.includes(value)))];
+}
+
+/**
+ * Recipes matching any of the selected cuisines, or all recipes if none are selected.
+ *
+ * @param {import("./recipes").Recipe[]} recipes
+ * @param {string[]} selected
+ */
+function filterByCuisines(recipes, selected) {
+  return selected.length ? recipes.filter(({ cuisine }) => selected.includes(cuisine)) : recipes;
+}
+
+/**
+ * Page title and meta description for the selected cuisines.
+ *
+ * @param {string[]} selected
+ */
+function pageMeta(selected) {
+  const label = selected.join(", ");
+  return {
+    title: label ? `${label} Recipes` : "Recipes",
+    description: label
+      ? `Have fun cooking ${label.toLowerCase()} recipes`
+      : "Have fun cooking recipes",
+  };
 }
 
 /**
