@@ -11,18 +11,18 @@ const RECIPE_PATH = new URLPattern({ pathname: "/:id(\\d+){-*}?" });
  * @param {import("./types").RouteProps} props
  */
 export default async function ({ request, reply }) {
-  const data = await tryLoadRecipes();
-  if (!data) {
-    return <ServiceUnavailable />;
-  }
-
   // Only accept paths like "/12" or "/12-some-slug".
-  const id = RECIPE_PATH.exec({ pathname: request.path })?.pathname.groups.id;
-  if (!id) {
+  const requestId = RECIPE_PATH.exec({ pathname: request.path })?.pathname.groups.id;
+  if (!requestId) {
     return;
   }
 
-  const recipe = data.recipesById.get(Number(id));
+  const recipeData = await tryLoadRecipes();
+  if (!recipeData) {
+    return <ServiceUnavailable />;
+  }
+
+  const recipe = recipeData.recipesById.get(Number(requestId));
   if (!recipe) {
     return;
   }
@@ -32,8 +32,7 @@ export default async function ({ request, reply }) {
     return reply.redirect(recipe.url, 301);
   }
 
-  const { name, ingredients, instructions, image, difficulty, cuisine, totalMinutes, transitions } =
-    recipe;
+  const { id, name, ingredients, instructions, image, difficulty, cuisine, totalMinutes } = recipe;
 
   return (
     <Layout title={name} description={`${name} - ${cuisine} - ${difficulty}`}>
@@ -41,13 +40,19 @@ export default async function ({ request, reply }) {
         &laquo; Back
       </a>
       <article>
-        <h1 style={transitions.title}>{name}</h1>
+        <h1 style={`view-transition-name: title-${id}`}>{name}</h1>
         <p>
           {cuisine} / {difficulty} / {totalMinutes} min
         </p>
         <div class="row">
           <div class="col">
-            <img src={image} alt={name} width="400" height="400" style={transitions.image} />
+            <img
+              src={image}
+              alt={name}
+              width="400"
+              height="400"
+              style={`view-transition-name: recipe-${id}`}
+            />
           </div>
           <div class="col">
             <h2>

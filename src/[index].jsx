@@ -14,69 +14,44 @@ const MAX_CUISINES = 20;
  * @param {import("./types").RouteProps} props
  */
 export default async function ({ request }) {
-  const data = await tryLoadRecipes();
-  if (!data) {
+  const recipeData = await tryLoadRecipes();
+  if (!recipeData) {
     return <ServiceUnavailable />;
   }
 
-  // Multiple cuisines can be selected: ?cuisine=Italian&cuisine=Thai
-  const cuisineParam = request.query["cuisine"];
-  // Deduplicate, so "?cuisine=Thai&cuisine=Thai" is treated like "?cuisine=Thai".
-  const selectedCuisines = [
-    ...new Set(
-      (Array.isArray(cuisineParam) ? cuisineParam : [cuisineParam]).filter(
-        (value) => typeof value === "string" && value !== "",
-      ),
-    ),
-  ].slice(0, MAX_CUISINES);
-  const selected = new Set(selectedCuisines);
+  const selectedCuisines = parseCuisines(request.query);
+  // Include unknown selected cuisines, so they can be removed again.
+  const cuisineOptions = [...new Set([...recipeData.cuisines, ...selectedCuisines])];
+  const filteredRecipes = selectedCuisines.length
+    ? recipeData.recipes.filter(({ cuisine }) => selectedCuisines.includes(cuisine))
+    : recipeData.recipes;
 
-  // Link that toggles the given cuisine in the current selection.
-  const toggleHref = (/** @type {string} */ cuisine) => {
-    const nextSelection = selected.has(cuisine)
-      ? selectedCuisines.filter((other) => other !== cuisine)
-      : [...selectedCuisines, cuisine];
-    const params = new URLSearchParams(nextSelection.map((value) => ["cuisine", value]));
-    return params.size ? `/?${params}` : "/";
-  };
-
-  const filteredRecipes = data.recipes.filter(
-    ({ cuisine }) => !selected.size || selected.has(cuisine),
-  );
-
-  const cuisineLabel = selectedCuisines.join(", ");
-  const title = `${cuisineLabel} Recipes`.trim();
+  const label = selectedCuisines.join(", ");
+  const title = label ? `${label} Recipes` : "Recipes";
+  const description = label
+    ? `Have fun cooking ${label.toLowerCase()} recipes`
+    : "Have fun cooking recipes";
 
   return (
-    <Layout
-      title={title}
-      description={["Have fun cooking", cuisineLabel.toLowerCase(), "recipes"]
-        .filter(Boolean)
-        .join(" ")}
-    >
+    <Layout title={title} description={description}>
       <h1>{title}</h1>
       <p>Discover delicious recipes to cook at home.</p>
-      <div class="row wrap">
-        <div class="col">
-          {/* Include unknown selected cuisines, so they can be removed again. */}
-          {[...new Set([...data.cuisines, ...selectedCuisines])].map((cuisine) => {
-            const active = selected.has(cuisine);
-            return (
-              <a
-                href={toggleHref(cuisine)}
-                rel="nofollow"
-                class={active ? "active" : undefined}
-                title={active ? "Remove filter" : undefined}
-              >
-                {cuisine}
-              </a>
-            );
-          })}
-        </div>
-      </div>
-      {!filteredRecipes.length ? (
-        <p>No recipes match the selected cuisines.</p>
-      ) : (
+      <nav class="filters">
+        {cuisineOptions.map((cuisine) => {
+          const active = selectedCuisines.includes(cuisine);
+          return (
+            <a
+              href={toggleHref(selectedCuisines, cuisine)}
+              rel="nofollow"
+              class={active ? "active" : undefined}
+              title={active ? "Remove filter" : undefined}
+            >
+              {cuisine}
+            </a>
+          );
+        })}
+      </nav>
+      {filteredRecipes.length ? (
         <div class="table-wrap">
           <table data-js-sort>
             <thead>
@@ -90,20 +65,20 @@ export default async function ({ request }) {
             </thead>
             <tbody>
               {filteredRecipes.map(
-                ({ name, cuisine, difficulty, image, totalMinutes, url, transitions }) => (
+                ({ id, name, cuisine, difficulty, image, totalMinutes, url }) => (
                   <tr>
                     <td>
                       <img
                         src={image}
                         alt=""
-                        style={transitions.image}
+                        style={`view-transition-name: recipe-${id}`}
                         height="50"
                         width="50"
                         loading="lazy"
                       />
                     </td>
                     <td>
-                      <a href={url} style={transitions.title}>
+                      <a href={url} style={`view-transition-name: title-${id}`}>
                         {name}
                       </a>
                     </td>
@@ -116,7 +91,38 @@ export default async function ({ request }) {
             </tbody>
           </table>
         </div>
+      ) : (
+        <p>No recipes match the selected cuisines.</p>
       )}
     </Layout>
   );
+}
+
+/**
+ * Selected cuisines from the query string, e.g. ?cuisine=Italian&cuisine=Thai.
+ * Empty values are dropped, duplicates removed and the count is capped.
+ *
+ * @param {unknown} query Fastify types the parsed query string as unknown.
+ * @returns {string[]}
+ */
+function parseCuisines(query) {
+  const param = /** @type {Record<string, unknown>} */ (query ?? {})["cuisine"];
+  const values = (Array.isArray(param) ? param : [param]).filter(
+    (value) => typeof value === "string" && value !== "",
+  );
+  return [...new Set(values)].slice(0, MAX_CUISINES);
+}
+
+/**
+ * Link that adds or removes the given cuisine from the current selection.
+ *
+ * @param {string[]} selected
+ * @param {string} cuisine
+ */
+function toggleHref(selected, cuisine) {
+  const next = selected.includes(cuisine)
+    ? selected.filter((other) => other !== cuisine)
+    : [...selected, cuisine];
+  const params = new URLSearchParams(next.map((value) => ["cuisine", value]));
+  return params.size ? `/?${params}` : "/";
 }

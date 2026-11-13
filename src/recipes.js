@@ -13,7 +13,6 @@
  *   cookTimeMinutes: number,
  *   totalMinutes: number,
  *   url: string,
- *   transitions: { image: string, title: string },
  * }} Recipe
  *
  * @typedef {{
@@ -68,18 +67,13 @@ async function fetchRecipes() {
   if (!response.ok) {
     throw new Error(`Failed to load recipes: ${response.status}`);
   }
-  /** @type {{ recipes: Omit<Recipe, "totalMinutes" | "url" | "transitions">[] }} */
+  /** @type {{ recipes: Omit<Recipe, "totalMinutes" | "url">[] }} */
   const json = await response.json();
   // Compute derived values once, so routes don't have to.
   const recipes = json.recipes.map((recipe) => ({
     ...recipe,
     totalMinutes: recipe.prepTimeMinutes + recipe.cookTimeMinutes,
     url: canonicalPath(recipe),
-    // Shared view-transition names, so list and detail page animate together.
-    transitions: {
-      image: `view-transition-name: recipe-${recipe.id}`,
-      title: `view-transition-name: title-${recipe.id}`,
-    },
   }));
   return {
     recipes,
