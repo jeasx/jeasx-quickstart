@@ -1,124 +1,122 @@
 /* This file is an example. Feel free to delete it. */
 
-import ErrorBoundary from "./components/ErrorBoundary";
 import Layout from "./components/Layout";
-import { loadRecipes, recipesLoaded } from "./utils/recipes";
-import slugify from "./utils/slugify";
+import ServiceUnavailable from "./components/ServiceUnavailable";
+import tryLoadRecipes from "./recipes";
+
+// Sort order for the difficulty column.
+const DIFFICULTIES = ["Easy", "Medium", "Hard"];
+
+// Limit selectable cuisines, so huge query strings can't blow up the page.
+const MAX_CUISINES = 20;
 
 /**
  * @param {import("./types").RouteProps} props
  */
-export default function ({ request }) {
+export default async function ({ request }) {
+  const data = await tryLoadRecipes();
+  if (!data) {
+    return <ServiceUnavailable />;
+  }
+
   // Multiple cuisines can be selected: ?cuisine=Italian&cuisine=Thai
   const cuisineParam = request.query["cuisine"];
-  const selectedCuisines = (Array.isArray(cuisineParam) ? cuisineParam : [cuisineParam]).filter(
-    (value) => typeof value === "string" && value !== "",
-  );
-  const cuisineLabel = selectedCuisines.join(", ");
+  // Deduplicate, so "?cuisine=Thai&cuisine=Thai" is treated like "?cuisine=Thai".
+  const selectedCuisines = [
+    ...new Set(
+      (Array.isArray(cuisineParam) ? cuisineParam : [cuisineParam]).filter(
+        (value) => typeof value === "string" && value !== "",
+      ),
+    ),
+  ].slice(0, MAX_CUISINES);
+  const selected = new Set(selectedCuisines);
 
-  // The page is streamed: head and intro are sent right away,
-  // the recipes follow as soon as they are loaded.
+  // Link that toggles the given cuisine in the current selection.
+  const toggleHref = (/** @type {string} */ cuisine) => {
+    const nextSelection = selected.has(cuisine)
+      ? selectedCuisines.filter((other) => other !== cuisine)
+      : [...selectedCuisines, cuisine];
+    const params = new URLSearchParams(nextSelection.map((value) => ["cuisine", value]));
+    return params.size ? `/?${params}` : "/";
+  };
+
+  const filteredRecipes = data.recipes.filter(
+    ({ cuisine }) => !selected.size || selected.has(cuisine),
+  );
+
+  const cuisineLabel = selectedCuisines.join(", ");
+  const title = `${cuisineLabel} Recipes`.trim();
+
   return (
     <Layout
-      title={`${cuisineLabel} Recipes`.trim()}
+      title={title}
       description={["Have fun cooking", cuisineLabel.toLowerCase(), "recipes"]
         .filter(Boolean)
         .join(" ")}
     >
-      <h1>{cuisineLabel} Recipes</h1>
+      <h1>{title}</h1>
       <p>Discover delicious recipes to cook at home.</p>
-      {recipesLoaded() ? (
-        // Data is cached, so nothing can fail: stream directly.
-        <Recipes selectedCuisines={selectedCuisines} />
-      ) : (
-        <ErrorBoundary fallback={<p>Recipes could not be loaded. Please try again later.</p>}>
-          <Recipes selectedCuisines={selectedCuisines} />
-        </ErrorBoundary>
-      )}
-    </Layout>
-  );
-}
-
-/**
- * @param {{selectedCuisines: string[]}} props
- */
-async function Recipes({ selectedCuisines }) {
-  const { recipes, cuisines } = await loadRecipes();
-
-  // Link that toggles the given cuisine in the current selection.
-  const toggleHref = (/** @type {string} */ cuisine) => {
-    const nextSelection = selectedCuisines.includes(cuisine)
-      ? selectedCuisines.filter((selected) => selected !== cuisine)
-      : [...selectedCuisines, cuisine];
-    const params = new URLSearchParams(nextSelection.map((selected) => ["cuisine", selected]));
-    return params.size ? `/?${params}` : "/";
-  };
-
-  const filteredRecipes = recipes.filter(
-    ({ cuisine }) => !selectedCuisines.length || selectedCuisines.includes(cuisine),
-  );
-
-  return (
-    <>
       <div class="row wrap">
         <div class="col">
           {/* Include unknown selected cuisines, so they can be removed again. */}
-          {[...new Set([...cuisines, ...selectedCuisines])].map((cuisine) => (
-            <a
-              href={toggleHref(cuisine)}
-              rel="nofollow"
-              class={selectedCuisines.includes(cuisine) ? "active" : undefined}
-              title={selectedCuisines.includes(cuisine) ? "Remove filter" : undefined}
-            >
-              {cuisine}
-            </a>
-          ))}
+          {[...new Set([...data.cuisines, ...selectedCuisines])].map((cuisine) => {
+            const active = selected.has(cuisine);
+            return (
+              <a
+                href={toggleHref(cuisine)}
+                rel="nofollow"
+                class={active ? "active" : undefined}
+                title={active ? "Remove filter" : undefined}
+              >
+                {cuisine}
+              </a>
+            );
+          })}
         </div>
       </div>
-      {!filteredRecipes.length && <p>No recipes match the selected cuisines.</p>}
-      <div class="table-wrap" hidden={!filteredRecipes.length}>
-        <table data-js-sort>
-          <thead>
-            <tr>
-              <th>Image</th>
-              <th data-js-sort>Name</th>
-              <th data-js-sort>Cuisine</th>
-              <th data-js-sort>Difficulty</th>
-              <th data-js-sort>Minutes</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredRecipes.map(
-              ({ id, name, cuisine, difficulty, image, prepTimeMinutes, cookTimeMinutes }) => (
-                <tr>
-                  <td>
-                    <img
-                      src={image}
-                      alt=""
-                      style={`view-transition-name: recipe-${id}`}
-                      height="50"
-                      width="50"
-                      loading="lazy"
-                    />
-                  </td>
-                  <td>
-                    <a href={`/${id}-${slugify(name)}`} style={`view-transition-name: title-${id}`}>
-                      {name}
-                    </a>
-                  </td>
-                  <td>{cuisine}</td>
-                  <td data-sort-value={["Easy", "Medium", "Hard"].indexOf(difficulty)}>
-                    {difficulty}
-                  </td>
-                  <td data-sort-value={prepTimeMinutes + cookTimeMinutes}>
-                    {prepTimeMinutes + cookTimeMinutes} min
-                  </td>
-                </tr>
-              ),
-            )}
-          </tbody>
-        </table>
-      </div>
-    </>
+      {!filteredRecipes.length ? (
+        <p>No recipes match the selected cuisines.</p>
+      ) : (
+        <div class="table-wrap">
+          <table data-js-sort>
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th data-js-sort>Name</th>
+                <th data-js-sort>Cuisine</th>
+                <th data-js-sort>Difficulty</th>
+                <th data-js-sort>Minutes</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredRecipes.map(
+                ({ name, cuisine, difficulty, image, totalMinutes, url, transitions }) => (
+                  <tr>
+                    <td>
+                      <img
+                        src={image}
+                        alt=""
+                        style={transitions.image}
+                        height="50"
+                        width="50"
+                        loading="lazy"
+                      />
+                    </td>
+                    <td>
+                      <a href={url} style={transitions.title}>
+                        {name}
+                      </a>
+                    </td>
+                    <td>{cuisine}</td>
+                    <td data-sort-value={DIFFICULTIES.indexOf(difficulty)}>{difficulty}</td>
+                    <td data-sort-value={totalMinutes}>{totalMinutes} min</td>
+                  </tr>
+                ),
+              )}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </Layout>
   );
 }

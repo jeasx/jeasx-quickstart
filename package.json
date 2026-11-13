@@ -7,6 +7,9 @@
     "dev": "jeasx dev",
     "clean": "jeasx clean"
   },
+  "engines": {
+    "node": ">=24"
+  },
   "dependencies": {
     "jeasx": "3.0.1"
   },

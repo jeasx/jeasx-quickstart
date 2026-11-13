@@ -2,8 +2,8 @@
 
 import Clipboard from "./components/Clipboard";
 import Layout from "./components/Layout";
-import { loadRecipes } from "./utils/recipes";
-import slugify from "./utils/slugify";
+import ServiceUnavailable from "./components/ServiceUnavailable";
+import tryLoadRecipes from "./recipes";
 
 const RECIPE_PATH = new URLPattern({ pathname: "/:id(\\d+){-*}?" });
 
@@ -11,48 +11,29 @@ const RECIPE_PATH = new URLPattern({ pathname: "/:id(\\d+){-*}?" });
  * @param {import("./types").RouteProps} props
  */
 export default async function ({ request, reply }) {
+  const data = await tryLoadRecipes();
+  if (!data) {
+    return <ServiceUnavailable />;
+  }
+
   // Only accept paths like "/12" or "/12-some-slug".
   const id = RECIPE_PATH.exec({ pathname: request.path })?.pathname.groups.id;
   if (!id) {
     return;
   }
 
-  let data;
-  try {
-    data = await loadRecipes();
-  } catch (error) {
-    request.log.error(error);
-    reply.status(503).header("Retry-After", "60");
-    return (
-      <Layout title="Service Unavailable" description="Recipes could not be loaded.">
-        <h1>Service Unavailable</h1>
-        <p>Recipes could not be loaded. Please try again later.</p>
-        <a href="/">Go to homepage</a>
-      </Layout>
-    );
-  }
-
-  const recipe = data.recipes.find((recipe) => recipe.id === Number(id));
+  const recipe = data.recipesById.get(Number(id));
   if (!recipe) {
     return;
   }
 
   // Redirect "/12" or "/12-wrong-slug" to the canonical URL.
-  const canonicalPath = `/${recipe.id}-${slugify(recipe.name)}`;
-  if (request.path !== canonicalPath) {
-    return reply.redirect(canonicalPath, 301);
+  if (request.path !== recipe.url) {
+    return reply.redirect(recipe.url, 301);
   }
 
-  const {
-    name,
-    ingredients,
-    instructions,
-    image,
-    difficulty,
-    cuisine,
-    prepTimeMinutes,
-    cookTimeMinutes,
-  } = recipe;
+  const { name, ingredients, instructions, image, difficulty, cuisine, totalMinutes, transitions } =
+    recipe;
 
   return (
     <Layout title={name} description={`${name} - ${cuisine} - ${difficulty}`}>
@@ -60,19 +41,13 @@ export default async function ({ request, reply }) {
         &laquo; Back
       </a>
       <article>
-        <h1 style={`view-transition-name: title-${id}`}>{name}</h1>
+        <h1 style={transitions.title}>{name}</h1>
         <p>
-          {cuisine} / {difficulty} / {prepTimeMinutes + cookTimeMinutes} min
+          {cuisine} / {difficulty} / {totalMinutes} min
         </p>
         <div class="row">
           <div class="col">
-            <img
-              src={image}
-              alt={name}
-              width="400"
-              height="400"
-              style={`view-transition-name: recipe-${id}`}
-            />
+            <img src={image} alt={name} width="400" height="400" style={transitions.image} />
           </div>
           <div class="col">
             <h2>

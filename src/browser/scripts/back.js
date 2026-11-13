@@ -10,11 +10,11 @@ const cameFromSite = (() => {
   }
 })();
 
-document.querySelectorAll("[data-js-back]").forEach((el) => {
-  if (el instanceof HTMLElement && cameFromSite) {
+if (cameFromSite) {
+  document.querySelectorAll("[data-js-back]").forEach((el) => {
     el.addEventListener("click", (e) => {
       e.preventDefault();
       history.back();
     });
-  }
-});
+  });
+}

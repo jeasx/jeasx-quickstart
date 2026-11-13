@@ -31,7 +31,8 @@ src/
 ├── [...guard].js        # Guard: runs before the routes in its folder and below
 ├── components/          # Reusable JSX components (no brackets = not a route)
 │   ├── Layout.jsx
-│   └── ErrorBoundary.jsx
+│   └── ServiceUnavailable.jsx
+├── recipes.js           # Shared recipe loader + in-memory cache
 └── browser/             # Client-side JavaScript and CSS, bundled for the browser
     ├── index.js
     └── index.css

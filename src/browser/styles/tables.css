@@ -95,17 +95,10 @@ th[data-js-sort] button:hover {
   transform: none;
 }
 
-th[data-js-sort] button::after {
-  content: "↕";
-  opacity: 0.4;
-}
-
 th[aria-sort="ascending"] button::after {
   content: "↑";
-  opacity: 1;
 }
 
 th[aria-sort="descending"] button::after {
   content: "↓";
-  opacity: 1;
 }

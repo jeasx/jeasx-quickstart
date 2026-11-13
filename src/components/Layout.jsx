@@ -4,8 +4,9 @@ import { html } from "jsx-async-runtime";
 
 /**
  * @this {import("../types").ThisContext}
+ * @param {{ title?: string, description?: string, children?: unknown }} props
  */
-export default function Layout({ title = "", description = "", children = undefined }) {
+export default function Layout({ title = "", description = "", children }) {
   // Pages with query parameters (filters, tracking, ...) should not be indexed.
   const hasQuery = Object.keys(this.request.query ?? {}).length > 0;
 
