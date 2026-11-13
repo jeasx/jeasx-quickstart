@@ -23,23 +23,11 @@
  */
 
 /**
- * Like loadRecipes, but logs a failure and returns null instead of throwing.
+ * Loads recipes, logs a failure and returns null instead of throwing.
  * Routes should call this before rendering, so a failure can still be
  * answered with a proper status code (it can't be changed once streaming started).
  *
- * @returns {Promise<RecipeData | null>}
- */
-export default async function tryLoadRecipes() {
-  try {
-    return await loadRecipes();
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-}
-
-/**
- * Cache data in memory to avoid unnecessary API calls.
+ * Data is cached in memory to avoid unnecessary API calls.
  * Loaded on first request; concurrent requests share the pending load,
  * a failed load is retried on the next request.
  *
@@ -47,16 +35,21 @@ export default async function tryLoadRecipes() {
  * because every route is bundled separately and
  * gets its own copy of this module.
  *
- * @returns {Promise<RecipeData>}
+ * @returns {Promise<RecipeData | null>}
  */
-function loadRecipes() {
-  if (globalThis.$recipes) {
-    return Promise.resolve(globalThis.$recipes);
+export default async function tryLoadRecipes() {
+  try {
+    if (globalThis.$recipes) {
+      return globalThis.$recipes;
+    }
+    globalThis.$recipesPending ??= fetchRecipes()
+      .then((data) => (globalThis.$recipes = data))
+      .finally(() => (globalThis.$recipesPending = undefined));
+    return await globalThis.$recipesPending;
+  } catch (error) {
+    console.error(error);
+    return null;
   }
-  globalThis.$recipesPending ??= fetchRecipes()
-    .then((data) => (globalThis.$recipes = data))
-    .finally(() => (globalThis.$recipesPending = undefined));
-  return globalThis.$recipesPending;
 }
 
 /** @returns {Promise<RecipeData>} */
