@@ -8,7 +8,7 @@ COPY --chown=node:node package.json package-lock.json ./
 RUN npm ci --omit=dev && npm cache clean --force
 COPY --chown=node:node . ./
 
-# Libraries like React check NODE_ENV at runtime and otherwise load their slower development builds.
+# Libraries like React check NODE_ENV and otherwise load their slower development builds.
 ENV NODE_ENV=production
 RUN node --run build
 
