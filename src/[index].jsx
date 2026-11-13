@@ -7,9 +7,6 @@ import tryLoadRecipes from "./recipes";
 // Sort order for the difficulty column.
 const DIFFICULTIES = ["Easy", "Medium", "Hard"];
 
-// Limit selectable cuisines, so huge query strings can't blow up the page.
-const MAX_CUISINES = 20;
-
 /**
  * @param {import("./types").RouteProps} props
  */
@@ -19,9 +16,7 @@ export default async function ({ request }) {
     return <ServiceUnavailable />;
   }
 
-  const selectedCuisines = parseCuisines(request.query);
-  // Include unknown selected cuisines, so they can be removed again.
-  const cuisineOptions = [...new Set([...recipeData.cuisines, ...selectedCuisines])];
+  const selectedCuisines = parseCuisines(request.query, recipeData.cuisines);
   const filteredRecipes = selectedCuisines.length
     ? recipeData.recipes.filter(({ cuisine }) => selectedCuisines.includes(cuisine))
     : recipeData.recipes;
@@ -37,7 +32,7 @@ export default async function ({ request }) {
       <h1>{title}</h1>
       <p>Discover delicious recipes to cook at home.</p>
       <nav class="filters">
-        {cuisineOptions.map((cuisine) => {
+        {recipeData.cuisines.map((cuisine) => {
           const active = selectedCuisines.includes(cuisine);
           return (
             <a
@@ -100,17 +95,20 @@ export default async function ({ request }) {
 
 /**
  * Selected cuisines from the query string, e.g. ?cuisine=Italian&cuisine=Thai.
- * Empty values are dropped, duplicates removed and the count is capped.
+ * Unknown values are dropped and duplicates removed.
  *
  * @param {unknown} query Fastify types the parsed query string as unknown.
+ * @param {string[]} known
  * @returns {string[]}
  */
-function parseCuisines(query) {
+function parseCuisines(query, known) {
   const param = /** @type {Record<string, unknown>} */ (query ?? {})["cuisine"];
-  const values = (Array.isArray(param) ? param : [param]).filter(
-    (value) => typeof value === "string" && value !== "",
-  );
-  return [...new Set(values)].slice(0, MAX_CUISINES);
+  const values = Array.isArray(param) ? param : [param];
+  return [
+    ...new Set(
+      values.filter((value) => typeof value === "string" && known.includes(value)),
+    ),
+  ];
 }
 
 /**
