@@ -19,6 +19,7 @@ export default function Layout({ title, description, children }) {
           <meta name="description" content={description} />
           {hasQuery && <meta name="robots" content="noindex, follow" />}
           <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
           <link rel="stylesheet" href={`/index.css?v=${process.env.BUILD_ID}`} />
           <script type="module" src={`/index.js?v=${process.env.BUILD_ID}`} />
           <title>{title} | Jeasx - JSX with ease</title>
