@@ -17,12 +17,14 @@ function show(el, state, text) {
   el.classList.remove("copied", "failed");
   el.classList.add(state);
   el.title = text;
-  clearTimeout(timers.get(el));
+  el.ariaLabel = text;
+  window.clearTimeout(timers.get(el));
   timers.set(
     el,
-    setTimeout(() => {
+    window.setTimeout(() => {
       el.classList.remove(state);
       el.title = title;
+      el.ariaLabel = title;
     }, 2000),
   );
 }

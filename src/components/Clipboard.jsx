@@ -8,7 +8,7 @@ import ClipboardIcon from "./Clipboard.svg";
  */
 export default function ({ title, list }) {
   return (
-    <button type="button" data-js-clipboard={list.join("\n")} title={title}>
+    <button type="button" data-js-clipboard={list.join("\n")} title={title} aria-label={title}>
       {html(ClipboardIcon)}
     </button>
   );
