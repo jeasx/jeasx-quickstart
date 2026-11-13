@@ -17,12 +17,11 @@ export default async function ({ request, reply }) {
     return;
   }
 
-  const data = await loadRecipes().catch((error) => {
+  let data;
+  try {
+    data = await loadRecipes();
+  } catch (error) {
     request.log.error(error);
-    return null;
-  });
-
-  if (!data) {
     reply.status(503).header("Retry-After", "60");
     return (
       <Layout title="Service Unavailable" description="Recipes could not be loaded.">
@@ -38,6 +37,12 @@ export default async function ({ request, reply }) {
     return;
   }
 
+  // Redirect "/12" or "/12-wrong-slug" to the canonical URL.
+  const canonicalPath = `/${recipe.id}-${slugify(recipe.name)}`;
+  if (request.path !== canonicalPath) {
+    return reply.redirect(canonicalPath, 301);
+  }
+
   const {
     name,
     ingredients,
@@ -48,12 +53,6 @@ export default async function ({ request, reply }) {
     prepTimeMinutes,
     cookTimeMinutes,
   } = recipe;
-
-  // Redirect "/12" or "/12-wrong-slug" to the canonical URL.
-  const canonicalPath = `/${id}-${slugify(name)}`;
-  if (request.path !== canonicalPath) {
-    return reply.redirect(canonicalPath, 301);
-  }
 
   return (
     <Layout title={name} description={`${name} - ${cuisine} - ${difficulty}`}>
