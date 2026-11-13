@@ -30,9 +30,13 @@ src/
 ├── [health].json        # Route: a simple health check returning JSON
 ├── [...guard].js        # Guard: runs before the routes in its folder and below
 ├── components/          # Reusable JSX components (no brackets = not a route)
-│   ├── Layout.jsx
+│   ├── Clipboard.jsx    # Copy-to-clipboard button
+│   ├── CuisineFilter.jsx # Cuisine filter links for the home page
+│   ├── Layout.jsx       # Shared HTML page layout
+│   ├── RecipeDetail.jsx # Recipe detail view (image, ingredients, instructions)
+│   ├── RecipeTable.jsx  # Sortable recipe table for the home page
 │   └── ServiceUnavailable.jsx
-├── recipes.js           # Shared recipe loader + in-memory cache
+├── recipes.js           # Shared recipe loader + in-memory cache (with derived values)
 └── browser/             # Client-side JavaScript and CSS, bundled for the browser
     ├── index.js
     └── index.css

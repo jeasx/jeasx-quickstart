@@ -6,6 +6,7 @@
  *   name: string,
  *   cuisine: string,
  *   difficulty: string,
+ *   difficultyRank: number,
  *   image: string,
  *   ingredients: string[],
  *   instructions: string[],
@@ -27,7 +28,8 @@
  * Routes should call this before rendering, so a failure can still be
  * answered with a proper status code (it can't be changed once streaming started).
  *
- * Data is cached in memory to avoid unnecessary API calls.
+ * Data is cached in memory for the lifetime of the process to avoid
+ * unnecessary API calls. It is never refreshed; restart to reload.
  * Loaded on first request; concurrent requests share the pending load,
  * a failed load is retried on the next request.
  *
@@ -60,11 +62,12 @@ async function fetchRecipes() {
   if (!response.ok) {
     throw new Error(`Failed to load recipes: ${response.status}`);
   }
-  /** @type {{ recipes: Omit<Recipe, "totalMinutes" | "url">[] }} */
+  /** @type {{ recipes: Omit<Recipe, "difficultyRank" | "totalMinutes" | "url">[] }} */
   const json = await response.json();
   // Compute derived values once, so routes don't have to.
   const recipes = json.recipes.map((recipe) => ({
     ...recipe,
+    difficultyRank: difficultyRank(recipe.difficulty),
     totalMinutes: recipe.prepTimeMinutes + recipe.cookTimeMinutes,
     url: canonicalPath(recipe),
   }));
@@ -75,16 +78,30 @@ async function fetchRecipes() {
   };
 }
 
+// Known difficulties, from easiest to hardest.
+const DIFFICULTIES = ["Easy", "Medium", "Hard"];
+
+/**
+ * Sort key for a difficulty, e.g. 0 for "Easy"; unknown values sort last.
+ *
+ * @param {string} difficulty
+ */
+function difficultyRank(difficulty) {
+  const rank = DIFFICULTIES.indexOf(difficulty);
+  return rank === -1 ? DIFFICULTIES.length : rank;
+}
+
 /**
  * Canonical URL of a recipe, e.g. "/12-classic-margherita-pizza".
  *
  * @param {{id: number, name: string}} recipe
  */
 function canonicalPath({ id, name }) {
-  return `/${id}-${name
+  const slug = name
     .normalize("NFKD")
     .replace(/\p{M}/gu, "")
     .toLowerCase()
-    .replace(/\W+/g, "-")
-    .replace(/^-+|-+$/g, "")}`;
+    .replace(/[^\p{L}\p{N}]+/gu, "-")
+    .replace(/^-+|-+$/g, "");
+  return slug ? `/${id}-${slug}` : `/${id}`;
 }

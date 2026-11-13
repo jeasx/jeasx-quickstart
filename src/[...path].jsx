@@ -1,7 +1,7 @@
 /* This file is an example. Feel free to delete it. */
 
-import Clipboard from "./components/Clipboard";
 import Layout from "./components/Layout";
+import RecipeDetail from "./components/RecipeDetail";
 import ServiceUnavailable from "./components/ServiceUnavailable";
 import tryLoadRecipes from "./recipes";
 
@@ -32,48 +32,14 @@ export default async function ({ request, reply }) {
     return reply.redirect(recipe.url, 301);
   }
 
-  const { id, name, ingredients, instructions, image, difficulty, cuisine, totalMinutes } = recipe;
+  const { name, cuisine, difficulty } = recipe;
 
   return (
     <Layout title={name} description={`${name} - ${cuisine} - ${difficulty}`}>
       <a href="/" data-js-back>
         &laquo; Back
       </a>
-      <article>
-        <h1 style={`view-transition-name: title-${id}`}>{name}</h1>
-        <p>
-          {cuisine} / {difficulty} / {totalMinutes} min
-        </p>
-        <div class="row">
-          <div class="col">
-            <img
-              src={image}
-              alt={name}
-              width="400"
-              height="400"
-              style={`view-transition-name: recipe-${id}`}
-            />
-          </div>
-          <div class="col">
-            <h2>
-              Ingredients <Clipboard title="Copy ingredients to clipboard" list={ingredients} />
-            </h2>
-            <ul>
-              {ingredients.map((ingredient) => (
-                <li>{ingredient}</li>
-              ))}
-            </ul>
-          </div>
-        </div>
-        <h2>
-          Instructions <Clipboard title="Copy instructions to clipboard" list={instructions} />
-        </h2>
-        <ol>
-          {instructions.map((instruction) => (
-            <li>{instruction}</li>
-          ))}
-        </ol>
-      </article>
+      <RecipeDetail recipe={recipe} />
     </Layout>
   );
 }

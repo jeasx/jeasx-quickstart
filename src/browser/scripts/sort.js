@@ -2,7 +2,9 @@
 
 // Makes columns of <table data-js-sort> sortable. Mark sortable headers with
 // <th data-js-sort>; cells can provide a sort key via data-sort-value.
-// Integers are compared as numbers, everything else as text.
+// Values are compared with a numeric-aware collator: digit sequences compare
+// as numbers ("2" < "10"), but signs and decimals are not understood, so
+// use non-negative integers for numeric sort keys.
 const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: "base" });
 
 document.querySelectorAll("table[data-js-sort]").forEach((table) => {
