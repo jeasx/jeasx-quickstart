@@ -12,8 +12,8 @@ const RECIPE_PATH = new URLPattern({ pathname: "/:id(\\d+){-*}?" });
  */
 export default async function ({ request, reply }) {
   // Only accept paths like "/12" or "/12-some-slug".
-  const requestId = RECIPE_PATH.exec({ pathname: request.path })?.pathname.groups.id;
-  if (!requestId) {
+  const recipeId = RECIPE_PATH.exec({ pathname: request.path })?.pathname.groups.id;
+  if (!recipeId) {
     return;
   }
 
@@ -22,7 +22,7 @@ export default async function ({ request, reply }) {
     return <ServiceUnavailable />;
   }
 
-  const recipe = recipeData.recipesById.get(Number(requestId));
+  const recipe = recipeData.recipesById.get(Number(recipeId));
   if (!recipe) {
     return;
   }
