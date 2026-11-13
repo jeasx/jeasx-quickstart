@@ -15,6 +15,7 @@ export default function CuisineFilter({ cuisines, selected }) {
             href={toggleHref(selected, cuisine)}
             rel="nofollow"
             class={active ? "active" : undefined}
+            aria-current={active ? "true" : undefined}
             title={active ? "Remove filter" : undefined}
           >
             {cuisine}
