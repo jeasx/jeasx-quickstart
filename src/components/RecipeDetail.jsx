@@ -7,9 +7,9 @@ import Clipboard from "./Clipboard";
  *
  * @param {{ recipe: import("../recipes").Recipe }} props
  */
-export default function RecipeDetail({ recipe }) {
-  const { id, name, ingredients, instructions, image, difficulty, cuisine, totalMinutes } = recipe;
-
+export default function RecipeDetail({
+  recipe: { id, name, ingredients, instructions, image, difficulty, cuisine, totalMinutes },
+}) {
   return (
     <article>
       <h1 style={`view-transition-name: title-${id}`}>{name}</h1>
