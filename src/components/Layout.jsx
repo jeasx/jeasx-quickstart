@@ -7,9 +7,6 @@ import { html } from "jsx-async-runtime";
  * @param {{ title: string, description: string, children?: unknown }} props
  */
 export default function Layout({ title, description, children }) {
-  // Pages with query parameters (filters, tracking, ...) should not be indexed.
-  const hasQuery = Object.keys(this.request.query ?? {}).length > 0;
-
   return (
     <>
       {html("<!DOCTYPE html>")}
@@ -17,7 +14,6 @@ export default function Layout({ title, description, children }) {
         <head>
           <meta charset="utf-8" />
           <meta name="description" content={description} />
-          {hasQuery && <meta name="robots" content="noindex, follow" />}
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
           <link rel="stylesheet" href={`/index.css?v=${process.env.BUILD_ID}`} />
