@@ -3,7 +3,6 @@
 import { html } from "jsx-async-runtime";
 
 /**
- * @this {import("../types").ThisContext}
  * @param {{ title: string, description: string, children?: unknown }} props
  */
 export default function Layout({ title, description, children }) {
