@@ -15,53 +15,32 @@ export default async function ({ request }) {
     return <ServiceUnavailable />;
   }
 
-  const selectedCuisines = parseCuisines(request.query, recipeData.cuisines);
-  const filteredRecipes = filterRecipesByCuisines(recipeData.recipes, selectedCuisines);
-  const { title, description } = titleAndDescription(selectedCuisines);
+  const cuisine = parseCuisine(request.query, recipeData.cuisines);
+  const title = cuisine ? `${cuisine} Recipes` : "Recipes";
+  const description = `Have fun cooking ${cuisine ? `${cuisine} ` : ""}recipes`;
+  const recipes = cuisine
+    ? recipeData.recipes.filter(({ cuisine }) => cuisine === cuisine)
+    : recipeData.recipes;
 
   return (
     <Layout title={title} description={description}>
       <h1>{title}</h1>
       <p>Discover delicious recipes to cook at home.</p>
-      <CuisineFilter cuisines={recipeData.cuisines} selected={selectedCuisines} />
-      <RecipeTable recipes={filteredRecipes} />
+      <CuisineFilter cuisines={recipeData.cuisines} selected={cuisine} />
+      <RecipeTable recipes={recipes} />
     </Layout>
   );
 }
 
 /**
- * Selected cuisines from the query string, e.g. ?cuisine=Italian&cuisine=Thai.
- * Unknown values are dropped and duplicates removed.
+ * Selected cuisine from the query string, e.g. ?cuisine=Italian.
+ * Unknown or repeated values are ignored.
  *
  * @param {unknown} query Fastify types the parsed query string as unknown.
  * @param {string[]} known
- * @returns {string[]}
+ * @returns {string | undefined}
  */
-function parseCuisines(query, known) {
-  const param = /** @type {Record<string, unknown>} */ (query ?? {})["cuisine"];
-  const values = Array.isArray(param) ? param : [param];
-  return [...new Set(values.filter((value) => typeof value === "string" && known.includes(value)))];
-}
-
-/**
- * Recipes matching any of the selected cuisines, or all recipes if none are selected.
- *
- * @param {import("./recipes").Recipe[]} recipes
- * @param {string[]} selected
- */
-function filterRecipesByCuisines(recipes, selected) {
-  return selected.length ? recipes.filter(({ cuisine }) => selected.includes(cuisine)) : recipes;
-}
-
-/**
- * Page title and meta description for the selected cuisines.
- *
- * @param {string[]} cuisines
- */
-function titleAndDescription(cuisines) {
-  const label = cuisines.join(", ");
-  return {
-    title: label ? `${label} Recipes` : "Recipes",
-    description: label ? `Have fun cooking ${label} recipes` : "Have fun cooking recipes",
-  };
+function parseCuisine(query, known) {
+  const cuisine = /** @type {Record<string, unknown>} */ (query ?? {})["cuisine"];
+  return typeof cuisine === "string" && known.includes(cuisine) ? cuisine : undefined;
 }

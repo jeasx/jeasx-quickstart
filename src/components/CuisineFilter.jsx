@@ -1,18 +1,18 @@
 /* This file is an example. Feel free to delete it. */
 
 /**
- * Links to toggle cuisine filters on and off.
+ * Links to select a single cuisine filter or clear it.
  *
- * @param {{ cuisines: string[], selected: string[] }} props
+ * @param {{ cuisines: string[], selected: string | undefined }} props
  */
 export default function CuisineFilter({ cuisines, selected }) {
   return (
     <nav class="filters">
       {cuisines.map((cuisine) => {
-        const active = selected.includes(cuisine);
+        const active = selected === cuisine;
         return (
           <a
-            href={toggleHref(selected, cuisine)}
+            href={active ? "/" : `/?${new URLSearchParams({ cuisine })}`}
             rel="nofollow"
             class={active ? "active" : undefined}
             aria-current={active ? "true" : undefined}
@@ -26,16 +26,3 @@ export default function CuisineFilter({ cuisines, selected }) {
   );
 }
 
-/**
- * Link that adds or removes the given cuisine from the current selection.
- *
- * @param {string[]} selected
- * @param {string} cuisine
- */
-function toggleHref(selected, cuisine) {
-  const next = selected.includes(cuisine)
-    ? selected.filter((other) => other !== cuisine)
-    : [...selected, cuisine];
-  const params = new URLSearchParams(next.map((value) => ["cuisine", value]));
-  return params.size ? `/?${params}` : "/";
-}
