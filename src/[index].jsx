@@ -15,18 +15,18 @@ export default async function ({ request }) {
     return <ServiceUnavailable />;
   }
 
-  const cuisine = parseCuisine(request.query, recipeData.cuisines);
-  const title = cuisine ? `${cuisine} Recipes` : "Recipes";
-  const description = `Have fun cooking ${cuisine ? `${cuisine} ` : ""}recipes`;
-  const recipes = cuisine
-    ? recipeData.recipes.filter(({ cuisine }) => cuisine === cuisine)
+  const selectedCuisine = parseCuisine(request.query, recipeData.cuisines);
+  const title = selectedCuisine ? `${selectedCuisine} Recipes` : "Recipes";
+  const description = `Have fun cooking ${selectedCuisine ? `${selectedCuisine} ` : ""}recipes`;
+  const recipes = selectedCuisine
+    ? recipeData.recipes.filter(({ cuisine }) => cuisine === selectedCuisine)
     : recipeData.recipes;
 
   return (
     <Layout title={title} description={description}>
       <h1>{title}</h1>
       <p>Discover delicious recipes to cook at home.</p>
-      <CuisineFilter cuisines={recipeData.cuisines} selected={cuisine} />
+      <CuisineFilter cuisines={recipeData.cuisines} selected={selectedCuisine} />
       <RecipeTable recipes={recipes} />
     </Layout>
   );
