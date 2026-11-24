@@ -9,18 +9,22 @@ import tryLoadRecipes from "./recipes";
 /**
  * @param {import("./types").RouteProps} props
  */
-export default async function ({ request }) {
+export default async function ({ request, reply }) {
   const recipeData = await tryLoadRecipes();
   if (!recipeData) {
     return <ServiceUnavailable />;
   }
 
-  const selectedCuisine = parseCuisine(request.query, recipeData.cuisines);
+  const selectedCuisine = (request.query ?? {})["cuisine"];
   const title = selectedCuisine ? `${selectedCuisine} Recipes` : "Recipes";
   const description = `Have fun cooking ${selectedCuisine ? `${selectedCuisine} ` : ""}recipes`;
   const recipes = selectedCuisine
     ? recipeData.recipes.filter(({ cuisine }) => cuisine === selectedCuisine)
     : recipeData.recipes;
+
+  if (recipes.length === 0) {
+    return reply.redirect("/", 301);
+  }
 
   return (
     <Layout title={title} description={description}>
@@ -30,17 +34,4 @@ export default async function ({ request }) {
       <RecipeTable recipes={recipes} />
     </Layout>
   );
-}
-
-/**
- * Selected cuisine from the query string, e.g. ?cuisine=Italian.
- * Unknown or repeated values are ignored.
- *
- * @param {unknown} query Fastify types the parsed query string as unknown.
- * @param {string[]} known
- * @returns {string | undefined}
- */
-function parseCuisine(query, known) {
-  const cuisine = /** @type {Record<string, unknown>} */ (query ?? {})["cuisine"];
-  return typeof cuisine === "string" && known.includes(cuisine) ? cuisine : undefined;
 }
