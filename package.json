@@ -7,11 +7,11 @@
     "dev": "jeasx dev",
     "clean": "jeasx clean"
   },
+  "dependencies": {
+    "jeasx": "3.1.0"
+  },
   "engines": {
     "node": ">=24"
-  },
-  "dependencies": {
-    "jeasx": "3.0.2"
   },
   "allowScripts": {
     "esbuild": true
